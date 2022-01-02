@@ -1,0 +1,53 @@
+---
+firefox_bin: /usr/local/bin
+firefox_path: /usr/local
+# The name and select name are taken from the selection
+# list at https://www.mozilla.org/en-GB/firefox/all/
+# the product is taken from the download URL
+firefox_editions:
+  - name: Firefox
+    symlink: firefox
+    select: desktop_release
+    product: firefox-latest
+  - name: Firefox Beta
+    symlink: firefox-beta
+    select: desktop_beta
+    product: firefox-beta-latest 
+  - name: Firefox Developer Edition
+    symlink: firefox-dev
+    select: desktop_developer
+    product: firefox-devedition-latest
+  - name: Firefox Nightly
+    symlink: firefox-nightly
+    select: desktop_nightly
+    product: firefox-nightly-latest
+# TODO
+# - name: Firefox Extended Support Release
+#   select: desktop_esr
+# - name: Firefox Android
+#   select: android_release
+# - name: Firefox Android Beta
+#   select: android_beta
+# - name: Firefox Android Nightly
+#   select: android_nightly
+# - name: Firefox iOS
+#   select: ios_release
+firefox_lang: en-GB
+firefox_platform: Linux 64-bit
+firefox_arch: linux64
+# TODO
+# - name: Linux 32-bit
+#   arch: linux
+# - name: Windows 64-bit
+#   arch: win64
+# - name: Windows 64-bit MSI
+#   arch: win64-msi
+# - name: Windows ARM64/AArch64
+#   arch: win64-aarch64
+# - name: Windows 32-bit
+#   arch: win
+# - name: Windows 32-bit MSI
+#   arch: win-msi
+# - name: macOS
+#   arch: osx
+...
