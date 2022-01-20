@@ -92,16 +92,24 @@
         - name: "Check if {{ edition.name }} has already been installed"
           stat:
             path: "{{ firefox_path }}/{{ edition.product }}"
-            register: firefox_dest
+          register: firefox_dest
 
         - name: "Move the old {{ edition.name }} out of the way and install the new version"
           shell: |
             set -e -o pipefail
-            mv {{ firefox_path }}/{{ edition.product }} {{ firefox_path }}/{{ edition.product }}_$(date +%Y-%m-%d)
+            mv {{ firefox_path }}/{{ edition.product }} {{ firefox_path }}/{{ edition.product }}_$(date +%Y-%m-%d-%H-%M-%S)
             mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}/firefox {{ firefox_path }}/{{ edition.product }}   
           args:
             executable: "{{ firefox_bash.stdout }}"
           when: firefox_dest.stat.exists
+
+        - name: "Install {{ edition.name }}"
+          shell: |
+            set -e -o pipefail
+            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}/firefox {{ firefox_path }}/{{ edition.product }}   
+          args:
+            executable: "{{ firefox_bash.stdout }}"
+          when: not firefox_dest.stat.exists
 
         - name: "{{ edition.name }} symlink in place"
           file:
