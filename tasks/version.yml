@@ -4,14 +4,15 @@
 
     - name: "Set a fact for the JSON version variable for {{ edition.name }}"
       set_fact:
-        firefox_var: "firefox_versions.json.{{ edition.version }}"
-      loop: firefox_versions.json
+        firefox_ver: "{{ line.value }}"
+      when: line.key == edition.version
+      loop: "{{ firefox_versions.json | dict2items }}"
       loop_control:
         loop_var: line
 
     - name: "Debug latest {{ edition.name }} version"
       debug:
-        var: firefox_var
+        var: firefox_ver
 
     - name: "Debug lookup latest {{ edition.name }} version"
       debug:
