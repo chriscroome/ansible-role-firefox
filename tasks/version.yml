@@ -1,0 +1,22 @@
+---
+- name: Download and install Firefox
+  block:
+
+    - name: Check URL
+      uri:
+        url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
+        method: HEAD
+        status_code: 302
+        follow_redirects: none
+      check_mode: false
+      changed_when: false
+      register: firefox_head
+
+    - name: Debug HEAD request
+      debug:
+        var: firefox_head
+        versbosity: 2
+
+  tags:
+    - forefox
+...
