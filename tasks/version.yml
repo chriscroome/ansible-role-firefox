@@ -13,6 +13,18 @@
         var: firefox_stat
         verbosity: 1
 
+    - name: Check installed version
+      command: "{{ firefox_bin }}/{{ edition.symlink }} --version"
+      check_mode: false
+      changed_when: false
+      register: firefox_version
+      when: firefox_stat.stat.exists
+
+    - name: Debug Firefox version
+      debug:
+        var: firefox_version
+        verbosity: 1
+
     - name: Check URL
       uri:
         url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
