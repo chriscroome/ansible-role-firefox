@@ -4,7 +4,7 @@
 
     - name: "Directory for downloads for {{ edition.name }} present"
       file:
-        path: "{{ firefox_download }}/{{ edition.symlink }}"
+        path: "{{ firefox_download }}/{{ edition.product }}"
         state: directory
         mode: 0700
 
