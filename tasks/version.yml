@@ -34,7 +34,7 @@
             verbosity: 2
 
         - name: "Set a variable for the version of {{ edition.name }} that is installed"
-          sansible.builtin.et_fact:
+          ansible.builtin.set_fact:
             firefox_installed: "{{ firefox_version.stdout | regex_replace('^Mozilla Firefox ') }}"
 
       when: firefox_stat.stat.exists
