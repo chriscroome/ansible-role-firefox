@@ -8,7 +8,20 @@
       changed_when: false
       register: firefox_bash
 
-    # TODO GPG public key import
+    - name: Mozilla Software Releases GPG key present
+      ansible.builtin.copy:
+        src: 61B7B526D98F0353.asc
+        dest: /root/61B7B526D98F0353.asc
+        mode: 0600
+
+    - name: Mozilla Software Releases GPG key imported
+      command: gpg --import /root/61B7B526D98F0353.asc
+      register: firefox_gpg_import
+
+    - name: Debug GPG key import
+      ansible.builtin.debug:
+        var: firefox_gpg_import
+        verbosity: 2
 
     - name: Include tasks for each version of Firefox
       include_tasks: version.yml
