@@ -8,7 +8,7 @@
 
     - name: "Debug latest {{ edition.name }} version"
       debug:
-        msg: "Latest {{ edition.name }} version is {{ firefox_var }}" 
+        var: firefox_var
 
     - name: "Directory for downloads for {{ edition.name }} present"
       ansible.builtin.file:
