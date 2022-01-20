@@ -56,15 +56,15 @@
         - name: "Download {{ edition.name }} GPG signature"
           ansible.builtin.get_url:
             url: "{{ firefox_head.location }}.asc"
-            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}.asc"
+            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
 
         - name: "Download {{ edition.name }} GPG signature"
           ansible.builtin.get_url:
             url: "{{ firefox_head.location }}"
-            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}"
+            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
 
         - name: "Check the {{ edition.name }} GPG signature"
-          command: "gpg --verify {{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}.asc"
+          command: "gpg --verify {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
           check_mode: false
           changed_when: false
           register: firefox_gpg_verify
@@ -79,15 +79,35 @@
 
         - name: "Directory present to unarchive {{ edition.name }} into present"
           file:
-            path: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}"
+            path: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}"
             state: directory
             mode: 0700
 
         - name: "Unarchive {{ edition.name }}"
           ansible.builtin.unarchive:
-            src: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}"
-            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}"
+            src: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
+            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}"
             remote_src: true
+
+        - name: "Check if {{ edition.name }} has already been installed"
+          stat:
+            path: "{{ firefox_path }}/{{ edition.product }}"
+            register: firefox_dest
+
+        - name: "Move the old {{ edition.name }} out of the way and install the new version"
+          shell: |
+            set -e -o pipefail
+            mv {{ firefox_path }}/{{ edition.product }} {{ firefox_path }}/{{ edition.product }}_$(date +%Y-%m-%d)
+            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}/firefox {{ firefox_path }}/{{ edition.product }}   
+          args:
+            executable: "{{ firefox_bash.stdout }}"
+          when: firefox_dest.stat.exists
+
+        - name: "{{ edition.name }} symlink in place"
+          file:
+            state: link
+            src: "{{ firefox_path }}/{{ edition.product }}/firefox"
+            dest: "{{ firefox_bin }}/{{ edition.symlink }}"
 
       when: >
         ( not firefox_stat.stat.exists )

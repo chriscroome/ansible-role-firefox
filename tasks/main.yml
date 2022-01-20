@@ -2,6 +2,12 @@
 - name: Install and upgrade Firefox
   block:
 
+    - name: Which Bash
+      command: which bash
+      check_mode: false
+      changed_when: false
+      register: firefox_bash
+
     # TODO GPG public key import
 
     - name: Include tasks for each version of Firefox
