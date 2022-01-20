@@ -66,6 +66,10 @@
         src: "{{ firefox_path }}/{{ edition.product }}/firefox"
         dest: "{{ firefox_bin }}/{{ edition.symlink }}"
 
+    - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version"
+      set_fact:
+        firefox_changelog: "{{ firefox_changelog }} + [ 'Installed {{ edition.name }} to version {{ firefox_latest }}' ] }}"
+
   tags:
     - firefox
 ...

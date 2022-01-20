@@ -24,4 +24,5 @@ firefox_editions:
     channel: desktop_nightly
     product: firefox-nightly-latest
     symlink: firefox-nightly
+firefox_changelog: []
 ...
