@@ -2,6 +2,12 @@
 - name: Install and upgrade Firefox
   block:
 
+    - name: Requirements present
+      ansible.builtin.apt:
+        pkg:
+          - gnupg
+        state: present
+
     - name: Which Bash
       ansible.builtin.command: which bash
       check_mode: false
@@ -17,6 +23,7 @@
     - name: Mozilla Software Releases GPG key imported
       command: gpg --import /root/61B7B526D98F0353.asc
       register: firefox_gpg_import
+      changed_when: ( "unchanged" not in firefox_gpg_import.stderr )
 
     - name: Debug GPG key import
       ansible.builtin.debug:
