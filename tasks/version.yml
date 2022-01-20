@@ -56,7 +56,7 @@
 
     - name: "Set a fact for the latest {{ edition.name }} available"
       set_fact:
-        firefox_latest: "{{ firefox_head.location | basename | splitext | first | splitext | first }}"
+        firefox_latest: "{{ firefox_head.location | basename | splitext | first | splitext | first | regex_replace('^firefox-') }}"
 
     - name: Download and install Firefox
       block:
@@ -127,7 +127,7 @@
 
       when: >
         ( not firefox_stat.stat.exists ) or
-        ( firefox_installed.is version(firefox_latest, '<') )
+        ( firefox_installed is version(firefox_latest, '<') )
 
   tags:
     - firefox
