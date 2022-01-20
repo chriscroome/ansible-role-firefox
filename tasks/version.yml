@@ -13,17 +13,21 @@
         var: firefox_stat
         verbosity: 1
 
-    - name: Check installed version
-      command: "{{ firefox_bin }}/{{ edition.symlink }} --version"
-      check_mode: false
-      changed_when: false
-      register: firefox_version
-      when: firefox_stat.stat.exists
+    - name: Check Firefox installed version
+      block:
 
-    - name: Debug Firefox version
-      debug:
-        var: firefox_version
-        verbosity: 1
+        - name: Check installed version
+          command: "{{ firefox_bin }}/{{ edition.symlink }} --version"
+          check_mode: false
+          changed_when: false
+          register: firefox_version
+
+        - name: Debug Firefox version
+          debug:
+            var: firefox_version
+            verbosity: 1
+
+      when: firefox_stat.stat.exists
 
     - name: Check URL
       uri:
@@ -39,6 +43,22 @@
       debug:
         var: firefox_head
         verbosity: 1
+
+    - name: Download Firefox
+      block:
+
+        - name: Download Firefox GPG signature
+          get_url:
+            url: "{{ firefox_head.location }}.asc"
+            dest: "/tmp/{{ edition.symlink | basename }}.asc"
+
+        - name: Download Firefox GPG
+          get_url:
+            url: "{{ firefox_head.location }}"
+            dest: "/tmp/{{ edition.symlink | basename }}"
+
+      when: >
+        ( not firefox_stat.stat.exists )
 
   tags:
     - forefox
