@@ -3,13 +3,13 @@
   block:
 
     - name: Check if Firefox is installed
-      stat:
+      ansible.builtin.stat:
         path: "{{ firefox_bin }}/{{ edition.symlink }}"
         follow: true
       register: firefox_stat
 
     - name: Debug Firefox stat
-      debug:
+      ansible.builtin.debug:
         var: firefox_stat
         verbosity: 1
 
@@ -17,20 +17,20 @@
       block:
 
         - name: Check installed version
-          command: "{{ firefox_bin }}/{{ edition.symlink }} --version"
+          ansible.builtin.command: "{{ firefox_bin }}/{{ edition.symlink }} --version"
           check_mode: false
           changed_when: false
           register: firefox_version
 
         - name: Debug Firefox version
-          debug:
+          ansible.builtin.debug:
             var: firefox_version
             verbosity: 1
 
       when: firefox_stat.stat.exists
 
     - name: Check URL
-      uri:
+      ansible.builtin.uri:
         url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
         method: HEAD
         status_code: 302
@@ -40,7 +40,7 @@
       register: firefox_head
 
     - name: Debug HEAD request
-      debug:
+      ansible.builtin.debug:
         var: firefox_head
         verbosity: 1
 
@@ -48,14 +48,25 @@
       block:
 
         - name: Download Firefox GPG signature
-          get_url:
+          ansible.builtin.get_url:
             url: "{{ firefox_head.location }}.asc"
-            dest: "/tmp/{{ edition.symlink | basename }}.asc"
+            dest: "{{ firefox_download }}/{{ firefox_head.location | basename }}.asc"
 
         - name: Download Firefox GPG
-          get_url:
+          ansible.builtin.get_url:
             url: "{{ firefox_head.location }}"
-            dest: "/tmp/{{ edition.symlink | basename }}"
+            dest: "{{ firefox_download }}/{{ firefox_head.location | basename }}"
+
+        - name: Check the GPG signature
+          command: "gpg --verify {{ firefox_download }}/{{ firefox_head.location | basename }}.asc"
+          check_mode: false
+          changed_when: false
+          register: firefox_gpg_verify
+
+        - name: Debug GPG verify result
+          ansible.builtin.debug:
+            var: firefox_gpg_verify
+            verbosity: 1
 
       when: >
         ( not firefox_stat.stat.exists )
