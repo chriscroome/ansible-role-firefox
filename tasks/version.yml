@@ -5,6 +5,9 @@
     - name: "Set a fact for the JSON version variable for {{ edition.name }}"
       set_fact:
         firefox_var: "firefox_versions.json.{{ edition.version }}"
+      loop: firefox_versions.json
+      loop_control:
+        loop_var: line
 
     - name: "Debug latest {{ edition.name }} version"
       debug:

@@ -49,6 +49,14 @@
         var: firefox_versions.json.LATEST_FIREFOX_VERSION
         verbosity: 2
 
+    - name: Debug Firefox versions
+      ansible.builtin.debug:
+        var: line
+        verbosity: 2
+      loop: firefox_versions.json
+      loop_control:
+        loop_var: line
+
     - name: Include tasks for each version of Firefox
       include_tasks: version.yml
       loop: "{{ firefox_editions }}"
