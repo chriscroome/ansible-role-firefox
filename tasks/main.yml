@@ -39,6 +39,11 @@
           - 200
       register: firefox_versions
 
+    - name: Debug Firefox versions type debug
+      ansible.builtin.debug:
+        msg: "{{ firefox_versions.json | type_debug }}"
+        verbosity: 2
+
     - name: Debug Firefox versions
       ansible.builtin.debug:
         var: firefox_versions.json
