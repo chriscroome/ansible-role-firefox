@@ -14,10 +14,6 @@
       debug:
         var: firefox_ver
 
-    - name: "Debug lookup latest {{ edition.name }} version"
-      debug:
-        msg: "{{ lookup('vars', firefox_var) }}"
-
     - name: "Directory for downloads for {{ edition.name }} present"
       ansible.builtin.file:
         path: "{{ firefox_download }}/{{ edition.product }}"
