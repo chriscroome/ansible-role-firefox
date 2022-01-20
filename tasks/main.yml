@@ -40,6 +40,7 @@
     - name: Print the CHANGELOG
       debug:
         var: firefox_changelog
+      when: firefox_changelog != []
 
   tags:
     - firefox

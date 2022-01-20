@@ -59,7 +59,7 @@
         firefox_latest: "{{ firefox_head.location | basename | splitext | first | splitext | first | regex_replace('^firefox-') }}"
 
     # Nightly includes lang and arch in the filename, eg firefox-98.0a1.en-GB.linux-x86_64.tar.bz2
-    - name: "Set a fact for the latest {{ edition.name }} available"
+    - name: "Set a fact for the latest Firefox Nightly available"
       ansible.builtin.set_fact:
         firefox_latest: "{{ firefox_latest | basename | splitext | first | splitext | first }}"
       when: edition.product == "firefox-nightly-latest"
