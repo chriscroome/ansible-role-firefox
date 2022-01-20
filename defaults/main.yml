@@ -23,7 +23,7 @@ firefox_editions:
     channel: desktop_developer
     product: firefox-devedition-latest
     symlink: firefox-dev
-    version: LATEST_FIREFOX_RELEASED_DEVEL_VERSION
+    version: FIREFOX_DEVEDITION
   - name: Firefox Nightly
     channel: desktop_nightly
     product: firefox-nightly-latest
