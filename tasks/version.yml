@@ -2,34 +2,40 @@
 - name: Download and install Firefox
   block:
 
-    - name: Check if Firefox is installed
+    - name: "Directory for downloads for {{ edition.name }} present"
+      file:
+        path: "{{ firefox_download }}/{{ edition.symlink }}"
+        state: directory
+        mode: 0700
+
+    - name: "Check if {{ edition.name }} is installed"
       ansible.builtin.stat:
         path: "{{ firefox_bin }}/{{ edition.symlink }}"
         follow: true
       register: firefox_stat
 
-    - name: Debug Firefox stat
+    - name: "Debug {{ edition.name }} stat"
       ansible.builtin.debug:
         var: firefox_stat
-        verbosity: 1
+        verbosity: 2
 
     - name: Check Firefox installed version
       block:
 
-        - name: Check installed version
+        - name: "Check installed version of {{ edition.name }}"
           ansible.builtin.command: "{{ firefox_bin }}/{{ edition.symlink }} --version"
           check_mode: false
           changed_when: false
           register: firefox_version
 
-        - name: Debug Firefox version
+        - name: "Debug installed {{ edition.name }} version"
           ansible.builtin.debug:
             var: firefox_version
-            verbosity: 1
+            verbosity: 2
 
       when: firefox_stat.stat.exists
 
-    - name: Check URL
+    - name: "Check URL for {{ edition.name }}"
       ansible.builtin.uri:
         url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
         method: HEAD
@@ -39,34 +45,43 @@
       changed_when: false
       register: firefox_head
 
-    - name: Debug HEAD request
+    - name: "Debug HEAD request for URL for {{ edition.name }}"
       ansible.builtin.debug:
         var: firefox_head
-        verbosity: 1
+        verbosity: 2
 
-    - name: Download Firefox
+    - name: Download and install Firefox
       block:
 
-        - name: Download Firefox GPG signature
+        - name: "Download {{ edition.name }} GPG signature"
           ansible.builtin.get_url:
             url: "{{ firefox_head.location }}.asc"
-            dest: "{{ firefox_download }}/{{ firefox_head.location | basename }}.asc"
+            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}.asc"
 
-        - name: Download Firefox GPG
+        - name: "Download {{ edition.name }} GPG signature"
           ansible.builtin.get_url:
             url: "{{ firefox_head.location }}"
-            dest: "{{ firefox_download }}/{{ firefox_head.location | basename }}"
+            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}"
 
-        - name: Check the GPG signature
-          command: "gpg --verify {{ firefox_download }}/{{ firefox_head.location | basename }}.asc"
+        - name: "Check the {{ edition.name }} GPG signature"
+          command: "gpg --verify {{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}.asc"
           check_mode: false
           changed_when: false
           register: firefox_gpg_verify
+          failed_when: >
+            ( firefox_gpg_verify.rc != 0 ) or 
+            ( "Good signature from" not in firefox_gpg_verify.stderr )
 
-        - name: Debug GPG verify result
+        - name: "Debug {{ edition.name }} GPG verify result"
           ansible.builtin.debug:
             var: firefox_gpg_verify
-            verbosity: 1
+            verbosity: 2
+
+        - name: "Unarchive {{ edition.name }}"
+          ansible.builtin.unarchive:
+            src: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}"
+            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename | splitext | first }}"
+            remote_src: true
 
       when: >
         ( not firefox_stat.stat.exists )
