@@ -77,7 +77,7 @@
           changed_when: false
           register: firefox_gpg_verify
           failed_when: >
-            ( firefox_gpg_verify.rc != 0 ) or 
+            ( firefox_gpg_verify.rc != 0 ) or
             ( "Good signature from" not in firefox_gpg_verify.stderr )
 
         - name: "Debug {{ edition.name }} GPG verify result"
@@ -106,7 +106,7 @@
           ansible.builtin.shell: |
             set -e -o pipefail
             mv {{ firefox_path }}/{{ edition.product }} {{ firefox_path }}/{{ edition.product }}_$(date +%Y-%m-%d-%H-%M-%S)
-            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}   
+            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}
           args:
             executable: "{{ firefox_bash.stdout }}"
           when: firefox_dest.stat.exists
@@ -114,7 +114,7 @@
         - name: "Install {{ edition.name }}"
           ansible.builtin.shell: |
             set -e -o pipefail
-            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}   
+            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}
           args:
             executable: "{{ firefox_bash.stdout }}"
           when: not firefox_dest.stat.exists
