@@ -15,7 +15,7 @@
     - name: Debug HEAD request
       debug:
         var: firefox_head
-        versbosity: 2
+        verbosity: 2
 
   tags:
     - forefox
