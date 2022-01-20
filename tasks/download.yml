@@ -2,6 +2,21 @@
 - name: Download and install Firefox
   block:
 
+    - name: "Check URL for {{ edition.name }}"
+      ansible.builtin.uri:
+        url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
+        method: HEAD
+        status_code: 302
+        follow_redirects: none
+      check_mode: false
+      changed_when: false
+      register: firefox_head
+
+    - name: "Debug HEAD request for URL for {{ edition.name }}"
+      ansible.builtin.debug:
+        var: firefox_head
+        verbosity: 2
+
     - name: "Download {{ edition.name }} GPG signature"
       ansible.builtin.get_url:
         url: "{{ firefox_head.location }}.asc"
@@ -68,7 +83,7 @@
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version"
       set_fact:
-        firefox_changelog: "{{ firefox_changelog }} + [ 'Installed {{ edition.name }} to version {{ firefox_latest }}' ]"
+        firefox_changelog: "{{ firefox_changelog }} + [ 'Installed {{ edition.name }} version {{ firefox_latest }}' ]"
 
   tags:
     - firefox

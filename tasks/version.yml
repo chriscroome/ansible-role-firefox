@@ -2,18 +2,6 @@
 - name: Check Firefox version
   block:
 
-    - name: "Set a fact for the JSON version variable for {{ edition.name }}"
-      set_fact:
-        firefox_ver: "{{ line.value }}"
-      when: line.key == edition.version
-      loop: "{{ firefox_versions.json | dict2items }}"
-      loop_control:
-        loop_var: line
-
-    - name: "Debug latest {{ edition.name }} version"
-      debug:
-        var: firefox_ver
-
     - name: "Directory for downloads for {{ edition.name }} present"
       ansible.builtin.file:
         path: "{{ firefox_download }}/{{ edition.product }}"
@@ -51,35 +39,26 @@
 
       when: firefox_stat.stat.exists
 
-    - name: "Check URL for {{ edition.name }}"
-      ansible.builtin.uri:
-        url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
-        method: HEAD
-        status_code: 302
-        follow_redirects: none
-      check_mode: false
-      changed_when: false
-      register: firefox_head
+    - name: "Set a fact for the JSON version variable for {{ edition.name }}"
+      set_fact:
+        firefox_latest: "{{ line.value }}"
+      when: line.key == edition.version
+      loop: "{{ firefox_versions.json | dict2items }}"
+      loop_control:
+        loop_var: line
 
-    - name: "Debug HEAD request for URL for {{ edition.name }}"
-      ansible.builtin.debug:
-        var: firefox_head
+    - name: "Debug latest {{ edition.name }} version"
+      debug:
+        var: firefox_latest
         verbosity: 2
-
-    - name: "Set a fact for the latest {{ edition.name }} available"
-      ansible.builtin.set_fact:
-        firefox_latest: "{{ firefox_head.location | basename | splitext | first | splitext | first | regex_replace('^firefox-') }}"
-
-    # Nightly includes lang and arch in the filename, eg firefox-98.0a1.en-GB.linux-x86_64.tar.bz2
-    - name: "Set a fact for the latest Firefox Nightly available"
-      ansible.builtin.set_fact:
-        firefox_latest: "{{ firefox_latest | basename | splitext | first | splitext | first }}"
-      when: edition.product == "firefox-nightly-latest"
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version"
       set_fact:
         firefox_changelog: "{{ firefox_changelog }} + [ 'The installed {{ edition.name }} {{ firefox_installed }} is the latest version' ]"
-      when: ( firefox_stat.stat.exists ) and ( firefox_installed is defined ) and ( ansible_verbosity > 0 )
+      when:
+        - firefox_stat.stat.exists
+        - firefox_installed is version(firefox_latest, '>=')
+        - ansible_verbosity > 0
 
     - name: "Download and install {{ edition.name }}"
       include_tasks: download.yml
