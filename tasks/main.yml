@@ -41,7 +41,7 @@
 
     - name: Debug Firefox versions
       ansible.builtin.debug:
-        var: firefox_versions
+        var: firefox_versions.json
         verbosity: 2
 
     - name: Include tasks for each version of Firefox
