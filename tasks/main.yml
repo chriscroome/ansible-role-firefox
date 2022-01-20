@@ -58,7 +58,7 @@
       ansible.builtin.debug:
         var: line
         verbosity: 2
-      loop: firefox_versions.json
+      loop: "{{ firefox_versions.json | dict2items }}"
       loop_control:
         loop_var: line
 
