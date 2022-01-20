@@ -3,7 +3,7 @@
   block:
 
     - name: Which Bash
-      command: which bash
+      ansible.builtin.command: which bash
       check_mode: false
       changed_when: false
       register: firefox_bash
