@@ -2,7 +2,7 @@
 - name: Install and upgrade Firefox
   block:
 
-    # TODO GPG public key import 
+    # TODO GPG public key import
 
     - name: Include tasks for each version of Firefox
       include_tasks: version.yml
