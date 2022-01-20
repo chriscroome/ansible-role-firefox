@@ -77,10 +77,16 @@
             var: firefox_gpg_verify
             verbosity: 2
 
+        - name: "Directory present to unarchive {{ edition.name }} into present"
+          file:
+            path: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}"
+            state: directory
+            mode: 0700
+
         - name: "Unarchive {{ edition.name }}"
           ansible.builtin.unarchive:
             src: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename }}"
-            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename | splitext | first }}"
+            dest: "{{ firefox_download }}/{{ edition.symlink }}/{{ firefox_head.location | basename | splitext | first | splitext | first }}"
             remote_src: true
 
       when: >
