@@ -1,3 +1,4 @@
-# firefox
+# Webarchitects Firefox Ansible Role
 
-Ansible role for installing Firefox on Debian.
+This is an Ansible role for installing Firefox on Debian or Ubuntu, it can be
+used with the [localhost playbook](https://git.coop/webarch/localhost).
