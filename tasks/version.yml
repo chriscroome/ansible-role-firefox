@@ -64,7 +64,12 @@
         firefox_latest: "{{ firefox_latest | basename | splitext | first | splitext | first }}"
       when: edition.product == "firefox-nightly-latest"
 
-    - name: Download and install Firefox
+    - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version"
+      set_fact:
+        firefox_changelog: "{{ firefox_changelog | default([]) }} + [ 'The installed {{ edition.name }} {{ firefox_installed }} is the latest version' ] }}"
+      when: ( firefox_stat.stat.exists ) and ( firefox_installed is defined ) and ( ansible_verbosity > 0 )
+
+    - name: "Download and install {{ edition.name }}"
       include_tasks: download.yml
       when: >
         ( not firefox_stat.stat.exists ) or

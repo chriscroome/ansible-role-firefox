@@ -37,6 +37,10 @@
         loop_var: edition
         label: "{{ edition.symlink }}"
 
+    - name: Print the CHANGELOG
+      debug:
+        var: firefox_changelog
+
   tags:
     - firefox
 ...
