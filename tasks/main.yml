@@ -30,6 +30,20 @@
         var: firefox_gpg_import
         verbosity: 2
 
+    - name: Import the Firefox versions JSON
+      uri:
+        url: https://product-details.mozilla.org/1.0/firefox_versions.json
+        force: true
+        return_content: true
+        status_code:
+          - 200
+      register: firefox_versions
+
+    - name: Debug Firefox versions
+      ansible.builtin.debug:
+        var: firefox_versions
+        verbosity: 2
+
     - name: Include tasks for each version of Firefox
       include_tasks: version.yml
       loop: "{{ firefox_editions }}"

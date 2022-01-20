@@ -6,23 +6,28 @@ firefox_bin: "{{ firefox_path }}/bin"
 firefox_download: /tmp
 # The name and channel (select name) are taken from the selection list at
 # https://www.mozilla.org/en-GB/firefox/all/ the product is taken from the
-# download URL
+# download URL and the version is taken from
+# https://product-details.mozilla.org/1.0/firefox_versions.json
 firefox_editions:
   - name: Firefox
     channel: desktop_release
     product: firefox-latest
     symlink: firefox
+    version: LATEST_FIREFOX_VERSION
   - name: Firefox Beta
     channel: desktop_beta
     product: firefox-beta-latest
     symlink: firefox-beta
+    version: LATEST_FIREFOX_DEVEL_VERSION
   - name: Firefox Developer Edition
     channel: desktop_developer
     product: firefox-devedition-latest
     symlink: firefox-dev
+    version: LATEST_FIREFOX_RELEASED_DEVEL_VERSION
   - name: Firefox Nightly
     channel: desktop_nightly
     product: firefox-nightly-latest
     symlink: firefox-nightly
+    version: FIREFOX_NIGHTLY
 firefox_changelog: []
 ...
