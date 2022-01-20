@@ -8,7 +8,7 @@
         state: directory
         mode: 0700
 
-    - name: "Check if {{ edition.name }} is installed"
+    - name: "Check if {{ edition.name }} symlink is present"
       ansible.builtin.stat:
         path: "{{ firefox_bin }}/{{ edition.symlink }}"
         follow: true
