@@ -2,6 +2,17 @@
 - name: Download and install Firefox
   block:
 
+    - name: Check if Firefox is installed
+      stat:
+        path: "{{ firefox_bin }}/{{ edition.symlink }}"
+        follow: true
+      register: firefox_stat
+
+    - name: Debug Firefox stat
+      debug:
+        var: firefox_stat
+        verbosity: 1
+
     - name: Check URL
       uri:
         url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
@@ -15,7 +26,7 @@
     - name: Debug HEAD request
       debug:
         var: firefox_head
-        verbosity: 2
+        verbosity: 1
 
   tags:
     - forefox
