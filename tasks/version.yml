@@ -58,6 +58,11 @@
       set_fact:
         firefox_latest: "{{ firefox_head.location | basename | splitext | first | splitext | first | regex_replace('^firefox-') }}"
 
+    - name: "Set a fact for the latest {{ edition.name }} available"
+      set_fact:
+        firefox_latest: "{{ firefox_latest | basename | splitext | first | splitext | first}}"
+      when: edition.product == "firefox-nightly-latest"
+
     - name: Download and install Firefox
       block:
 
