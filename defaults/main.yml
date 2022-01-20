@@ -1,7 +1,6 @@
 ---
 firefox_lang: en-GB
 firefox_arch: linux64
-firefox_platform: Linux 64-bit
 firefox_path: /usr/local
 firefox_bin: "{{ firefox_path }}/bin"
 firefox_download: /tmp

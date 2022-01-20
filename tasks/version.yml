@@ -1,9 +1,9 @@
 ---
-- name: Download and install Firefox
+- name: Check Firefox version
   block:
 
     - name: "Directory for downloads for {{ edition.name }} present"
-      file:
+      ansible.builtin.file:
         path: "{{ firefox_download }}/{{ edition.product }}"
         state: directory
         mode: 0700
@@ -34,7 +34,7 @@
             verbosity: 2
 
         - name: "Set a variable for the version of {{ edition.name }} that is installed"
-          set_fact:
+          sansible.builtin.et_fact:
             firefox_installed: "{{ firefox_version.stdout | regex_replace('^Mozilla Firefox ') }}"
 
       when: firefox_stat.stat.exists
@@ -55,81 +55,17 @@
         verbosity: 2
 
     - name: "Set a fact for the latest {{ edition.name }} available"
-      set_fact:
+      ansible.builtin.set_fact:
         firefox_latest: "{{ firefox_head.location | basename | splitext | first | splitext | first | regex_replace('^firefox-') }}"
 
+    # Nightly includes lang and arch in the filename, eg firefox-98.0a1.en-GB.linux-x86_64.tar.bz2
     - name: "Set a fact for the latest {{ edition.name }} available"
-      set_fact:
+      ansible.builtin.set_fact:
         firefox_latest: "{{ firefox_latest | basename | splitext | first | splitext | first}}"
       when: edition.product == "firefox-nightly-latest"
 
     - name: Download and install Firefox
-      block:
-
-        - name: "Download {{ edition.name }} GPG signature"
-          ansible.builtin.get_url:
-            url: "{{ firefox_head.location }}.asc"
-            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
-
-        - name: "Download {{ edition.name }} GPG signature"
-          ansible.builtin.get_url:
-            url: "{{ firefox_head.location }}"
-            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
-
-        - name: "Check the {{ edition.name }} GPG signature"
-          ansible.builtin.command: "gpg --verify {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
-          check_mode: false
-          changed_when: false
-          register: firefox_gpg_verify
-          failed_when: >
-            ( firefox_gpg_verify.rc != 0 ) or
-            ( "Good signature from" not in firefox_gpg_verify.stderr )
-
-        - name: "Debug {{ edition.name }} GPG verify result"
-          ansible.builtin.debug:
-            var: firefox_gpg_verify
-            verbosity: 2
-
-        - name: "Directory present to unarchive {{ edition.name }} into present"
-          ansible.builtin.file:
-            path: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
-            state: directory
-            mode: 0700
-
-        - name: "Unarchive {{ edition.name }}"
-          ansible.builtin.unarchive:
-            src: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
-            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
-            remote_src: true
-
-        - name: "Check if {{ edition.name }} has already been installed"
-          ansible.builtin.stat:
-            path: "{{ firefox_path }}/{{ edition.product }}"
-          register: firefox_dest
-
-        - name: "Move the old {{ edition.name }} out of the way and install the new version"
-          ansible.builtin.shell: |
-            set -e -o pipefail
-            mv {{ firefox_path }}/{{ edition.product }} {{ firefox_path }}/{{ edition.product }}_$(date +%Y-%m-%d-%H-%M-%S)
-            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}
-          args:
-            executable: "{{ firefox_bash.stdout }}"
-          when: firefox_dest.stat.exists
-
-        - name: "Install {{ edition.name }}"
-          ansible.builtin.shell: |
-            set -e -o pipefail
-            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}
-          args:
-            executable: "{{ firefox_bash.stdout }}"
-          when: not firefox_dest.stat.exists
-
-        - name: "{{ edition.name }} symlink in place"
-          ansible.builtin.file:
-            state: link
-            src: "{{ firefox_path }}/{{ edition.product }}/firefox"
-            dest: "{{ firefox_bin }}/{{ edition.symlink }}"
-
+      include_tasks: download.yml
       when: >
         ( not firefox_stat.stat.exists ) or
         ( firefox_installed is version(firefox_latest, '<') )
