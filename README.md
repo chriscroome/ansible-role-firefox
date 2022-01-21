@@ -9,7 +9,7 @@ This is an Ansible role for installing Firefox on x86_64 Debian or Ubuntu
 See the [defaults](defaults/main.yml) for the different versions of Firefox
 that can be downloaded, installed and updated.
 
-It works by:
+It is designed to be run using `sudo` or as `root` and works by:
 
 1. Installing the [Mozilla Software Releases GPG
    key](https://blog.mozilla.org/security/2021/06/02/updating-gpg-key-for-signing-firefox-releases/).
