@@ -40,6 +40,7 @@
       loop: "{{ firefox_versions.json | dict2items }}"
       loop_control:
         loop_var: line
+        label: "{{ line.key }}"
 
     - name: "Debug latest {{ edition.name }} version"
       ansible.builtin.debug:
