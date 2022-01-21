@@ -17,4 +17,5 @@ It is designed to be run using `sudo` or as `root` and works by:
    JSON](https://product-details.mozilla.org/1.0/firefox_versions.json).
 3. Checking the locally installed version and if the latest available version
    is newer downloads Firefox and the GPG signature, verifies it and installs
-   it in `/usr/local` and symlinks it from `/usr/local/bin`.
+   it in `/usr/local`, symlinks it from `/usr/local/bin` and creates a `.desktop`
+   file in `/usr/share/applications`.
