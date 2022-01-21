@@ -64,16 +64,16 @@
         path: "{{ firefox_path }}/{{ edition.product }}"
       register: firefox_dest
 
-    - name: "Move the old {{ edition.name }} out of the way and install the new version"
+    - name: "Delete the old {{ edition.name }} and move the new version in place"
       ansible.builtin.shell: |
         set -e -o pipefail
-        mv {{ firefox_path }}/{{ edition.product }} {{ firefox_path }}/{{ edition.product }}_$(date +%Y-%m-%d-%H-%M-%S)
+        rm -rf {{ firefox_path }}/{{ edition.product }}
         mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}
       args:
         executable: "{{ firefox_bash.stdout }}"
       when: firefox_dest.stat.exists
 
-    - name: "Install {{ edition.name }}"
+    - name: "{{ edition.name }} in place"
       ansible.builtin.shell: |
         set -e -o pipefail
         mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.product }}
@@ -86,6 +86,12 @@
         state: link
         src: "{{ firefox_path }}/{{ edition.product }}/firefox"
         dest: "{{ firefox_bin }}/{{ edition.symlink }}"
+
+    - name: "{{ edition.name }} desktop file in place"
+      ansible.builtin.template:
+        src: firefox.desktop.j2
+        dest: /usr/share/applications/{{ edition.product }}.desktop
+        mode: 0644
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version"
       ansible.builtin.set_fact:

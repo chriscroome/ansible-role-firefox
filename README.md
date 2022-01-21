@@ -1,5 +1,7 @@
 # Webarchitects Firefox Ansible Role
 
+[![pipeline status](https://git.coop/webarch/firefox/badges/master/pipeline.svg)](https://git.coop/webarch/firefox/-/commits/master)
+
 This is an Ansible role for installing Firefox on x86_64 Debian or Ubuntu
 (untested on other architectures or distros), it can be used with the
 [localhost playbook](https://git.coop/webarch/localhost).
