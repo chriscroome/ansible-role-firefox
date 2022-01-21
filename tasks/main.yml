@@ -51,6 +51,7 @@
       loop: "{{ firefox_versions.json | dict2items }}"
       loop_control:
         loop_var: line
+        label: "{{ line.key }}"
 
     - name: Include tasks for each version of Firefox
       include_tasks: version.yml
