@@ -2,12 +2,6 @@
 - name: Check Firefox version
   block:
 
-    - name: "Directory for downloads for {{ edition.name }} present"
-      ansible.builtin.file:
-        path: "{{ firefox_download }}/{{ edition.product }}"
-        state: directory
-        mode: 0700
-
     - name: "Check if {{ edition.name }} symlink is present"
       ansible.builtin.stat:
         path: "{{ firefox_bin }}/{{ edition.symlink }}"
@@ -40,7 +34,7 @@
       when: firefox_stat.stat.exists
 
     - name: "Set a fact for the JSON version variable for {{ edition.name }}"
-      set_fact:
+      ansible.builtin.set_fact:
         firefox_latest: "{{ line.value }}"
       when: line.key == edition.version
       loop: "{{ firefox_versions.json | dict2items }}"
@@ -48,12 +42,12 @@
         loop_var: line
 
     - name: "Debug latest {{ edition.name }} version"
-      debug:
+      ansible.builtin.debug:
         var: firefox_latest
         verbosity: 2
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version"
-      set_fact:
+      ansible.builtin.set_fact:
         firefox_changelog: "{{ firefox_changelog }} + [ 'The installed {{ edition.name }} {{ firefox_installed }} is the latest version' ]"
       when:
         - firefox_stat.stat.exists

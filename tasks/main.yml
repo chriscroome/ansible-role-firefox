@@ -21,7 +21,7 @@
         mode: 0600
 
     - name: Mozilla Software Releases GPG key imported
-      command: gpg --import /root/61B7B526D98F0353.asc
+      ansible.builtin.command: gpg --import /root/61B7B526D98F0353.asc
       register: firefox_gpg_import
       changed_when: ( "unchanged" not in firefox_gpg_import.stderr )
 
@@ -31,7 +31,7 @@
         verbosity: 2
 
     - name: Import the Firefox versions JSON
-      uri:
+      ansible.builtin.uri:
         url: https://product-details.mozilla.org/1.0/firefox_versions.json
         force: true
         return_content: true
@@ -60,7 +60,7 @@
         label: "{{ edition.symlink }}"
 
     - name: Print the CHANGELOG
-      debug:
+      ansible.builtin.debug:
         var: firefox_changelog
       when: firefox_changelog != []
 

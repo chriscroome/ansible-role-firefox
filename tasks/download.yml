@@ -2,6 +2,12 @@
 - name: Download and install Firefox
   block:
 
+    - name: "Directory for downloads for {{ edition.name }} present"
+      ansible.builtin.file:
+        path: "{{ firefox_download }}/{{ edition.product }}"
+        state: directory
+        mode: 0700
+
     - name: "Check URL for {{ edition.name }}"
       ansible.builtin.uri:
         url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
@@ -82,7 +88,7 @@
         dest: "{{ firefox_bin }}/{{ edition.symlink }}"
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version"
-      set_fact:
+      ansible.builtin.set_fact:
         firefox_changelog: "{{ firefox_changelog }} + [ 'Installed {{ edition.name }} version {{ firefox_latest }}' ]"
 
   tags:
