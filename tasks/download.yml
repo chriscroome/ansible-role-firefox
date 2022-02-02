@@ -43,7 +43,7 @@
       register: firefox_gpg_verify
       failed_when: >
         ( firefox_gpg_verify.rc != 0 ) or
-        ( "Good signature from" not in firefox_gpg_verify.stderr )
+        ( "Good signature from" not in firefox_gpg_verify.stdout )
 
     - name: "Debug {{ edition.name }} GPG verify result"
       ansible.builtin.debug:
