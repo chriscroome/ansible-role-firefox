@@ -19,6 +19,6 @@ It is designed to be run using `sudo` or as `root` and works by:
    is newer then:
    - Downloading Firefox and the GPG signature.
    - Verifying the downloaded files using the GPG signature.
-   - Installing Firefox in it in `/usr/local`, symlinking it from
+   - Installing Firefox in `/usr/local`, symlinking it from
       `/usr/local/bin` and creating a `.desktop` file in 
       `/usr/share/applications`.

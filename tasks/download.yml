@@ -34,7 +34,10 @@
         dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
 
     - name: "Check the {{ edition.name }} GPG signature"
-      ansible.builtin.command: "gpg --verify {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
+      ansible.builtin.command: >
+        gpg --no-tty --verify --logger-fd 1
+        {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc
+        {{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}
       check_mode: false
       changed_when: false
       register: firefox_gpg_verify
