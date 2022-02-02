@@ -28,7 +28,7 @@
         url: "{{ firefox_head.location }}.asc"
         dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
 
-    - name: "Download {{ edition.name }} GPG signature"
+    - name: "Download {{ edition.name }}"
       ansible.builtin.get_url:
         url: "{{ firefox_head.location }}"
         dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
