@@ -54,11 +54,15 @@
         label: "{{ line.key }}"
 
     - name: Include tasks for each version of Firefox
-      include_tasks: version.yml
+      ansible.builtin.include_tasks: version.yml
       loop: "{{ firefox_editions }}"
       loop_control:
         loop_var: edition
         label: "{{ edition.symlink }}"
+
+    - name: Include firejail tasks
+      ansible.builtin.include_tasks: firejail.yml
+      when: firefox_firejail | bool
 
     - name: Print the CHANGELOG
       ansible.builtin.debug:

@@ -1,0 +1,33 @@
+---
+- name: Firefox in firejail
+  block:
+
+    - name: Packages present
+      ansible.builtin.apt:
+        pkg:
+          - firejail
+          - firejail-profiles
+
+    - name: Firefox firejail latest profile in place
+      ansible.builtin.template:
+        src: firefox-latest.profile.j2
+        dest: /etc/firejail/firefox-latest.profile
+        owner: root
+        group: root
+        mode: 644
+
+    - name: Firefox firelain local profiles present
+      ansible.builtin.template:
+        src: firefox.local.j2
+        dest: "/etc/firejail/{{ edition.path }}.local"
+        owner: root
+        group: root
+        mode: 644
+      loop: "{{ firefox_editions }}"
+      loop_control:
+        loop_var: edition
+        label: "{{ edition.symlink }}"
+
+  tags:
+    - firefox
+...

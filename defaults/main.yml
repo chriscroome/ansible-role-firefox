@@ -1,33 +1,39 @@
 ---
 firefox_lang: en-GB
 firefox_arch: linux64
-firefox_path: /usr/local
-firefox_bin: "{{ firefox_path }}/bin"
+firefox_path: /opt
+firefox_bin: /usr/local/bin
 firefox_download: /tmp
 # The name and channel (select name) are taken from the selection list at
 # https://www.mozilla.org/en-GB/firefox/all/ the product is taken from the
 # download URL and the version is taken from
 # https://product-details.mozilla.org/1.0/firefox_versions.json
+# path is taken from the names used by firejail
 firefox_editions:
   - name: Firefox
     channel: desktop_release
+    path: firefox-latest
     product: firefox-latest
     symlink: firefox
     version: LATEST_FIREFOX_VERSION
   - name: Firefox Beta
     channel: desktop_beta
+    path: firefox-beta
     product: firefox-beta-latest
     symlink: firefox-beta
     version: LATEST_FIREFOX_DEVEL_VERSION
   - name: Firefox Developer Edition
     channel: desktop_developer
+    path: firefox-developer-edition
     product: firefox-devedition-latest
     symlink: firefox-dev
     version: FIREFOX_DEVEDITION
   - name: Firefox Nightly
     channel: desktop_nightly
+    path: firefox-nightly
     product: firefox-nightly-latest
     symlink: firefox-nightly
     version: FIREFOX_NIGHTLY
 firefox_changelog: []
+firefox_firejail: true
 ...
