@@ -7,6 +7,8 @@
         path: "{{ firefox_download }}/{{ edition.product }}"
         state: directory
         mode: 0700
+        owner: root
+        group: root
 
     - name: "Check URL for {{ edition.name }}"
       ansible.builtin.uri:
@@ -55,6 +57,8 @@
         path: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
         state: directory
         mode: 0700
+        owner: root
+        group: root
 
     - name: "Unarchive {{ edition.name }}"
       ansible.builtin.unarchive:
@@ -84,11 +88,19 @@
         executable: "{{ firefox_bash.stdout }}"
       when: not firefox_dest.stat.exists
 
-    - name: "{{ edition.name }} symlink in place"
-      ansible.builtin.file:
-        state: link
-        src: "{{ firefox_path }}/{{ edition.path }}/firefox"
+    # - name: "{{ edition.name }} symlink in place"
+    #   ansible.builtin.file:
+    #     state: link
+    #     src: "{{ firefox_path }}/{{ edition.path }}/firefox"
+    #     dest: "{{ firefox_bin }}/{{ edition.symlink }}"
+
+    - name: "{{ edition.name }} script in place"
+      ansible.builtin.template:
+        src: firefox.sh.j2
         dest: "{{ firefox_bin }}/{{ edition.symlink }}"
+        mode: 0755
+        owner: root
+        group: root
 
     - name: "{{ edition.name }} desktop file in place"
       ansible.builtin.template:
