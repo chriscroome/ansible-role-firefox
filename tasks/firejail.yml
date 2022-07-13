@@ -15,14 +15,14 @@
           - firejail-profiles
         state: latest
         default_release: "{{ ansible_distribution_release }}-backports"
-      when: firefox_debian_backports in firefox_apt_cache_policy.stdout
+      when: firefox_backports in firefox_apt_cache_policy.stdout
 
     - name: Packages present
       ansible.builtin.apt:
         pkg:
           - firejail
           - firejail-profiles
-      when: firefox_debian_backports not in firefox_apt_cache_policy.stdout
+      when: firefox_backports not in firefox_apt_cache_policy.stdout
 
     - name: Firefox firejail latest profile in place
       ansible.builtin.template:
