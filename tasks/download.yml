@@ -88,16 +88,10 @@
         executable: "{{ firefox_bash.stdout }}"
       when: not firefox_dest.stat.exists
 
-    # - name: "{{ edition.name }} symlink in place"
-    #   ansible.builtin.file:
-    #     state: link
-    #     src: "{{ firefox_path }}/{{ edition.path }}/firefox"
-    #     dest: "{{ firefox_bin }}/{{ edition.symlink }}"
-
     - name: "{{ edition.name }} script in place"
       ansible.builtin.template:
         src: firefox.sh.j2
-        dest: "{{ firefox_bin }}/{{ edition.symlink }}"
+        dest: "{{ firefox_bin }}/{{ edition.script }}"
         mode: 0755
         owner: root
         group: root

@@ -58,7 +58,7 @@
       loop: "{{ firefox_editions }}"
       loop_control:
         loop_var: edition
-        label: "{{ edition.symlink }}"
+        label: "{{ edition.script }}"
 
     - name: Include firejail tasks
       ansible.builtin.include_tasks: firejail.yml

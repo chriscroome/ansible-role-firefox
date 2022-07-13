@@ -2,9 +2,9 @@
 - name: Check Firefox version
   block:
 
-    - name: "Check if {{ edition.name }} symlink is present"
+    - name: "Check if {{ edition.name }} is present"
       ansible.builtin.stat:
-        path: "{{ firefox_bin }}/{{ edition.symlink }}"
+        path: "{{ firefox_path }}/{{ edition.path }}/firefox"
         follow: true
       register: firefox_stat
 
@@ -17,7 +17,7 @@
       block:
 
         - name: "Check installed version of {{ edition.name }}"
-          ansible.builtin.command: "{{ firefox_bin }}/{{ edition.symlink }} --version"
+          ansible.builtin.command: "{{ firefox_path }}/{{ edition.path }}/firefox --version"
           check_mode: false
           changed_when: false
           register: firefox_version

@@ -16,7 +16,7 @@
         group: root
         mode: 644
 
-    - name: Firefox firelain local profiles present
+    - name: Firefox firejail local profiles present
       ansible.builtin.template:
         src: firefox.local.j2
         dest: "/etc/firejail/{{ edition.path }}.local"
@@ -26,7 +26,7 @@
       loop: "{{ firefox_editions }}"
       loop_control:
         loop_var: edition
-        label: "{{ edition.symlink }}"
+        label: "{{ edition.script }}"
 
   tags:
     - firefox
