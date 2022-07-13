@@ -14,25 +14,25 @@ firefox_editions:
     channel: desktop_release
     path: firefox-latest
     product: firefox-latest
-    symlink: firefox
+    script: firefox
     version: LATEST_FIREFOX_VERSION
   - name: Firefox Beta
     channel: desktop_beta
     path: firefox-beta
     product: firefox-beta-latest
-    symlink: firefox-beta
+    script: firefox-beta
     version: LATEST_FIREFOX_DEVEL_VERSION
   - name: Firefox Developer Edition
     channel: desktop_developer
     path: firefox-developer-edition
     product: firefox-devedition-latest
-    symlink: firefox-dev
+    script: firefox-dev
     version: FIREFOX_DEVEDITION
   - name: Firefox Nightly
     channel: desktop_nightly
     path: firefox-nightly
     product: firefox-nightly-latest
-    symlink: firefox-nightly
+    script: firefox-nightly
     version: FIREFOX_NIGHTLY
 firefox_changelog: []
 firefox_firejail: true
