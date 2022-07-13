@@ -2,11 +2,26 @@
 - name: Firefox in firejail
   block:
 
+    - name: Run apt-cache policy
+      ansible.builtin.command: apt-cache policy
+      check_mode: false
+      changed_when: false
+      register: forefox_apt_cache_policy
+
+    - name: Packages present from backports
+      ansible.builtin.apt:
+        pkg:
+          - firejail
+          - firejail-profiles
+      default_release: "{{ ansible_distrobution_release }}-backports"
+      when: ( "{{ ansible_distrobution_release }}-backports" in firefox_apt_cache_policy.stdout )
+
     - name: Packages present
       ansible.builtin.apt:
         pkg:
           - firejail
           - firejail-profiles
+      when: ( "{{ ansible_distrobution_release }}-backports" not in firefox_apt_cache_policy.stdout )
 
     - name: Firefox firejail latest profile in place
       ansible.builtin.template:

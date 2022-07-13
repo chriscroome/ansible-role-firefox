@@ -6,7 +6,7 @@ This is an Ansible role for installing Firefox on x86_64 Debian or Ubuntu (untes
 
 See the [defaults](defaults/main.yml) for the different versions of Firefox that can be downloaded, installed and updated.
 
-By default this role configures Firefox to be run via [Firejail](https://github.com/netblue30/firejail).
+By default this role configures Firefox to be run via [Firejail](https://github.com/netblue30/firejail), which is installed from [Debian backports](https://backports.debian.org/) if available.
 
 It is designed to be run using `sudo` or as `root` and works by:
 
