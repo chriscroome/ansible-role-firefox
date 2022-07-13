@@ -13,6 +13,7 @@
         pkg:
           - firejail
           - firejail-profiles
+        state: latest
         default_release: "{{ ansible_distribution_release }}-backports"
       when: firefox_debian_backports in firefox_apt_cache_policy.stdout
 
