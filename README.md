@@ -6,8 +6,6 @@ This is an Ansible role for installing Firefox on x86_64 Debian or Ubuntu (untes
 
 See the [defaults](defaults/main.yml) for the different versions of Firefox that can be downloaded, installed and updated.
 
-By default this role configures Firefox to be run via [Firejail](https://github.com/netblue30/firejail), which is installed from [Debian backports](https://backports.debian.org/) if available.
-
 It is designed to be run using `sudo` or as `root` and works by:
 
 1. Installing the [Mozilla Software Releases GPG key](https://blog.mozilla.org/security/2021/06/02/updating-gpg-key-for-signing-firefox-releases/).
@@ -16,3 +14,13 @@ It is designed to be run using `sudo` or as `root` and works by:
    - Downloading Firefox and the GPG signature.
    - Verifying the downloaded files using the GPG signature.
    - Installing Firefox in `/opt`, adding a script to launch it in `/usr/local/bin` and creating a `.desktop` file in `/usr/share/applications`.
+
+## Firejail
+
+By default this role configures the Firejail for all the versions that are installed to be run via [Firejail](https://github.com/netblue30/firejail), which is installed from [Debian backports](https://backports.debian.org/) if available.
+
+If you need to use WebAuthn (for example using a Yubikey) then you need to edit `/etc/firejail/firejail.config` to set:
+
+```
+browser-disable-u2f no
+```
