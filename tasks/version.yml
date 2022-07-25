@@ -59,7 +59,8 @@
       include_tasks: download.yml
       when: >
         ( not firefox_stat.stat.exists ) or
-        ( firefox_installed is version(firefox_latest, '<') )
+        ( firefox_installed is version(firefox_latest, '<') ) or
+        ( edition.product == "firefox-nightly-latest" )
 
   tags:
     - firefox
