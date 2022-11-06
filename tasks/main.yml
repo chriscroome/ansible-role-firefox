@@ -47,7 +47,7 @@
     - name: Debug Firefox versions type debug
       ansible.builtin.debug:
         msg: "{{ firefox_versions.json | type_debug }}"
-        verbosity: 2
+        verbosity: 3
 
     - name: Debug Firefox versions JSON
       ansible.builtin.debug:
