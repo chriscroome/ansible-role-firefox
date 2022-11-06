@@ -44,7 +44,7 @@
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version for Ansible < 2.13.0"
       ansible.builtin.set_fact:
-        firefox_changelog: "{{ firefox_changelog }} + [ '{{ firefox_changelog_msg }}' ]"
+        firefox_changelog: "{{ firefox_changelog }} + ['{{ firefox_changelog_msg }}']"
       vars:
         firefox_changelog_msg: "{{ edition.name }} version {{ firefox_installed }} is already the latest version."
       when:
@@ -55,7 +55,7 @@
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version for Ansible >= 2.13.0"
       ansible.builtin.set_fact:
-        firefox_changelog: "{{ firefox_changelog + [ firefox_changelog_msg ] }}"
+        firefox_changelog: "{{ firefox_changelog + [firefox_changelog_msg] }}"
       vars:
         firefox_changelog_msg: "{{ edition.name }} version {{ firefox_installed }} is already the latest version."
       when:
