@@ -47,6 +47,17 @@
         var: firefox_latest
         verbosity: 2
 
+    - name: "Set a fact for the JSON version variable for {{ edition.name }}"
+      ansible.builtin.set_fact:
+        firefox_latest: "{{ firefox_versions.json | community.general.json_query(edition.version) }}"
+
+    - name: "Debug latest {{ edition.name }} version"
+      ansible.builtin.debug:
+        var: firefox_latest
+        verbosity: 2
+
+    - fail:
+
     - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version"
       ansible.builtin.set_fact:
         firefox_changelog: "{{ firefox_changelog }} + [ 'The installed {{ edition.name }} {{ firefox_installed }} is the latest version' ]"
@@ -56,7 +67,7 @@
         - ansible_verbosity > 0
 
     - name: "Download and install {{ edition.name }}"
-      include_tasks: download.yml
+      ansible.builtin.include_tasks: download.yml
       when: >
         ( not firefox_stat.stat.exists ) or
         ( firefox_installed is version(firefox_latest, '<') ) or

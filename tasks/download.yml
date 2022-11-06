@@ -29,11 +29,18 @@
       ansible.builtin.get_url:
         url: "{{ firefox_head.location }}.asc"
         dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
+        mode: 0644
+        owner: root
+        group: root
 
     - name: "Download {{ edition.name }}"
       ansible.builtin.get_url:
         url: "{{ firefox_head.location }}"
         dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
+        mode: 0644
+        owner: root
+        group: root
+      register: firefox_download_archive
 
     - name: "Check the {{ edition.name }} GPG signature"
       ansible.builtin.command: >
@@ -60,33 +67,40 @@
         owner: root
         group: root
 
-    - name: "Unarchive {{ edition.name }}"
-      ansible.builtin.unarchive:
-        src: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
-        dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
-        remote_src: true
+    - name: "Unarchive and move {{ edition.name }}"
+      block:
 
-    - name: "Check if {{ edition.name }} has already been installed"
-      ansible.builtin.stat:
-        path: "{{ firefox_path }}/{{ edition.path }}"
-      register: firefox_dest
+        - name: "Unarchive {{ edition.name }}"
+          ansible.builtin.unarchive:
+            src: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
+            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
+            remote_src: true
+            owner: root
+            group: root
+          
+        - name: "Check if {{ edition.name }} has already been installed"
+          ansible.builtin.stat:
+            path: "{{ firefox_path }}/{{ edition.path }}"
+          register: firefox_dest
 
-    - name: "Delete the old {{ edition.name }} and move the new version in place"
-      ansible.builtin.shell: |
-        set -e -o pipefail
-        rm -rf {{ firefox_path }}/{{ edition.path }}
-        mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
-      args:
-        executable: "{{ firefox_bash.stdout }}"
-      when: firefox_dest.stat.exists
+        - name: "Delete the old {{ edition.name }} and move the new version in place"
+          ansible.builtin.shell: |
+            set -e -o pipefail
+            rm -rf {{ firefox_path }}/{{ edition.path }}
+            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
+          args:
+            executable: "{{ firefox_bash.stdout }}"
+          when: firefox_dest.stat.exists
 
-    - name: "{{ edition.name }} in place"
-      ansible.builtin.shell: |
-        set -e -o pipefail
-        mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
-      args:
-        executable: "{{ firefox_bash.stdout }}"
-      when: not firefox_dest.stat.exists
+        - name: "{{ edition.name }} in place"
+          ansible.builtin.shell: |
+            set -e -o pipefail
+            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
+          args:
+            executable: "{{ firefox_bash.stdout }}"
+          when: not firefox_dest.stat.exists
+
+      when: firefox_download_archive.changed | bool
 
     - name: "{{ edition.name }} script in place"
       ansible.builtin.template:
@@ -101,6 +115,8 @@
         src: firefox.desktop.j2
         dest: /usr/share/applications/{{ edition.product }}.desktop
         mode: 0644
+        owner: root
+        group: root
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version"
       ansible.builtin.set_fact:

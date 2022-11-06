@@ -30,7 +30,7 @@
         dest: /etc/firejail/firefox-latest.profile
         owner: root
         group: root
-        mode: 644
+        mode: 0644
 
     - name: Firefox firejail local profiles present
       ansible.builtin.template:
@@ -38,7 +38,7 @@
         dest: "/etc/firejail/{{ edition.path }}.local"
         owner: root
         group: root
-        mode: 644
+        mode: 0644
       loop: "{{ firefox_editions }}"
       loop_control:
         loop_var: edition
