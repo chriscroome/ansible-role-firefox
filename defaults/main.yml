@@ -9,7 +9,7 @@ firefox_firejail: true
 # https://www.mozilla.org/en-GB/firefox/all/ the product is taken from the
 # download URL and the version is taken from
 # https://product-details.mozilla.org/1.0/firefox_versions.json
-# path is taken from the names used by firejail
+# path is taken from the name used by firejail
 firefox_editions:
   - name: Firefox
     channel: desktop_release

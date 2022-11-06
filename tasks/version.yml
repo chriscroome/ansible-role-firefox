@@ -35,28 +35,12 @@
 
     - name: "Set a fact for the JSON version variable for {{ edition.name }}"
       ansible.builtin.set_fact:
-        firefox_latest: "{{ line.value }}"
-      when: line.key == edition.version
-      loop: "{{ firefox_versions.json | dict2items }}"
-      loop_control:
-        loop_var: line
-        label: "{{ line.key }}"
-
-    - name: "Debug latest {{ edition.name }} version"
-      ansible.builtin.debug:
-        var: firefox_latest
-        verbosity: 2
-
-    - name: "Set a fact for the JSON version variable for {{ edition.name }}"
-      ansible.builtin.set_fact:
         firefox_latest: "{{ firefox_versions.json | community.general.json_query(edition.version) }}"
 
     - name: "Debug latest {{ edition.name }} version"
       ansible.builtin.debug:
         var: firefox_latest
         verbosity: 2
-
-    - fail:
 
     - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version"
       ansible.builtin.set_fact:
