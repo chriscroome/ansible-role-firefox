@@ -24,3 +24,9 @@ If you need to use WebAuthn (for example using a Yubikey) then you need to edit 
 ```
 browser-disable-u2f no
 ```
+
+## Repo
+
+The primary URL of this repo is [`https://git.coop/webarch/firefox`](https://git.coop/chriscroome/firefox) however it is also [mirrored to GitHub](https://github.com/webarch-coop/ansible-role-firefox) and [available via Ansible Galaxy](https://galaxy.ansible.com/chriscroome/firefox).
+
+If you use this role please use a tagged release, see [the release notes](https://git.coop/webarch/firefox/-/releases).
