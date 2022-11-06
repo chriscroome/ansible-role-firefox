@@ -29,6 +29,9 @@
       ansible.builtin.debug:
         var: firefox_gpg_import
         verbosity: 2
+      when:
+        - firefox_gpg_import.changes | bool
+        - not firefox_gpg_import.skipped | bool
 
     - name: Import the Firefox versions JSON
       ansible.builtin.uri:
@@ -37,6 +40,8 @@
         return_content: true
         status_code:
           - 200
+      check_mode: false
+      changed_when: false
       register: firefox_versions
 
     - name: Debug Firefox versions type debug
