@@ -77,7 +77,7 @@
             remote_src: true
             owner: root
             group: root
-          
+
         - name: "Check if {{ edition.name }} has already been installed"
           ansible.builtin.stat:
             path: "{{ firefox_path }}/{{ edition.path }}"
