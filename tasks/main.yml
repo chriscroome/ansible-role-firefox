@@ -51,12 +51,8 @@
 
     - name: Debug Firefox versions JSON
       ansible.builtin.debug:
-        var: line
+        var: firefox_versions.json
         verbosity: 2
-      loop: "{{ firefox_versions.json | dict2items }}"
-      loop_control:
-        loop_var: line
-        label: "{{ line.key }}"
 
     - name: Include tasks for each version of Firefox
       ansible.builtin.include_tasks: version.yml
