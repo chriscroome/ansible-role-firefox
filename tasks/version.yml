@@ -42,10 +42,20 @@
         var: firefox_latest
         verbosity: 2
 
-    - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version"
+    - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version for Ansible < 2.13.0"
       ansible.builtin.set_fact:
         firefox_changelog: "{{ firefox_changelog }} + [ 'The installed {{ edition.name }} {{ firefox_installed }} is the latest version' ]"
       when:
+        - ansible_version.full is version('2.13.0', '<')
+        - firefox_stat.stat.exists
+        - firefox_installed is version(firefox_latest, '>=')
+        - ansible_verbosity > 0
+
+    - name: "Append a CHANGELOG message to say that {{ edition.name }} is already the latest version for Ansible >= 2.13.0"
+      ansible.builtin.set_fact:
+        firefox_changelog: "{{ firefox_changelog + [ 'The installed ' edition.name firefox_installed ' is the latest version' ]"
+      when:
+        - ansible_version.full is version('2.13.0', '>=')
         - firefox_stat.stat.exists
         - firefox_installed is version(firefox_latest, '>=')
         - ansible_verbosity > 0

@@ -10,9 +10,15 @@ galaxy_info:
   platforms:
     - name: debian
       versions:
+        - bookworm
         - bullseye
     - name: ubuntu
       versions:
         - focal
-  galaxy_tags: []
+  galaxy_tags:
+    - debian
+    - firefox
+    - firejail
+    - mozilla
+    - ubuntu
 ...
