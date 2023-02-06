@@ -54,7 +54,7 @@ firefox_editions:
     jail: true
 ```
 
-By default the Firecfor ESR version is not installed since this is provided by Debian.
+By default the Firefox ESR version is not installed since this is provided by Debian.
 
 The `firefox_editions` list variables are:
 
@@ -138,7 +138,7 @@ browser-disable-u2f no
 
 ## Repository
 
-The primary URL of this repo is [`https://git.coop/webarch/firefox`](https://git.coop/chriscroome/firefox) however it is also [mirrored to GitHub](https://github.com/webarch-coop/ansible-role-firefox) and [available via Ansible Galaxy](https://galaxy.ansible.com/chriscroome/firefox).
+The primary URL of this repo is [`https://git.coop/webarch/firefox`](https://git.coop/chriscroome/firefox) however it is also [mirrored to GitHub](https://github.com/chriscroome/ansible-role-firefox) and [available via Ansible Galaxy](https://galaxy.ansible.com/chriscroome/firefox).
 
 If you use this role please use a tagged release, see [the release notes](https://git.coop/webarch/firefox/-/releases).
 
