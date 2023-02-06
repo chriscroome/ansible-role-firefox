@@ -21,7 +21,7 @@
 
     - name: "Check URL for {{ edition.name }}"
       ansible.builtin.uri:
-        url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch }}&lang={{ firefox_lang }}"
+        url: "https://download.mozilla.org/?product={{ edition.product }}&os={{ firefox_arch[ansible_architecture] }}&lang={{ firefox_lang }}"
         method: HEAD
         status_code: 302
         follow_redirects: none

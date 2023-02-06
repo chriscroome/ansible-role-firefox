@@ -1,0 +1,203 @@
+# Copyright 2022-2023 Chris Croome
+#
+# This file is part of the Webarchitects Firefox Ansible role.
+#
+# The Webarchitects Firefox Ansible role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects Firefox Ansible role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
+---
+argument_specs:
+  main:
+    author: Chris Croome
+    description: An Ansible role for installing Firefox on Linux x86_64 and i386.
+    short_description: The main entry point for the Ansible role.
+    options:
+      firefox:
+        type: bool
+        required: true
+        description: Run the tasks in this role.
+      firefox_bin:
+        type: str
+        required: true
+        description: The bin directory to use for Firefox.
+      firefox_download:
+        type: str
+        required: true
+        description: The download directory for Firefox.
+      firefox_editions:
+        type: list
+        required: true
+        description: A list of Firefox versions and variables.
+        options:
+          channel:
+            type: str
+            required: true
+            description: Firefox channel taken from https://www.mozilla.org/en-GB/firefox/all/.
+            choices:
+              - desktop_release
+              - desktop_beta
+              - desktop_developer
+              - desktop_nightly
+              - desktop_esr
+          jail:
+            type: bool
+            required: true
+            description: Run Firefox in a firejail.
+          name:
+            type: str
+            required: true
+            description: Firefox version name from select list at https://www.mozilla.org/en-GB/firefox/all/.
+            choices:
+              - Firefox
+              - Firefox Beta
+              - Firefox Developer Edition
+              - Firefox Nightly
+              - Firefox Extended Support Release
+          path:
+            type: str
+            required: true
+            description: Firefox firejail path.
+            choices:
+              - firefox-latest
+              - firefox-beta
+              - firefox-developer-edition
+              - firefox-nightly
+              - firefox-esr
+          product:
+            type: str
+            required: true
+            description: Firefox download URL from https://www.mozilla.org/en-GB/firefox/all/.
+            choices:
+              - firefox-latest
+              - firefox-beta-latest
+              - firefox-devedition-latest
+              - firefox-nightly-latest
+              - firefox-esr-latest
+          script:
+            type: str
+            required: true
+            description: The name of the script used to run Firefox.
+          version:
+            type: str
+            required: true
+            description: Firefox version taken from https://product-details.mozilla.org/1.0/firefox_versions.json.
+            choices:
+              - LATEST_FIREFOX_VERSION
+              - LATEST_FIREFOX_DEVEL_VERSION
+              - FIREFOX_DEVEDITION
+              - FIREFOX_NIGHTLY
+              - FIREFOX_ESR
+      firefox_firejail:
+        type: bool
+        required: true
+        description: Install firejail.
+      firefox_lang:
+        type: str
+        required: true
+        description: The Firefox language taken from the selet list at https://www.mozilla.org/en-GB/firefox/all/.
+        choices:
+          - ach
+          - af
+          - an
+          - ar
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cak
+          - ca-valencia
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en-CA
+          - en-GB
+          - en-US
+          - eo
+          - es-AR
+          - es-CL
+          - es-ES
+          - es-MX
+          - et
+          - eu
+          - fa
+          - ff
+          - fi
+          - fr
+          - fy-NL
+          - ga-IE
+          - gd
+          - gl
+          - gn
+          - gu-IN
+          - he
+          - hi-IN
+          - hr
+          - hsb
+          - hu
+          - hy-AM
+          - ia
+          - id
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - lij
+          - lt
+          - lv
+          - mk
+          - mr
+          - ms
+          - my
+          - nb-NO
+          - ne-NP
+          - nl
+          - nn-NO
+          - oc
+          - pa-IN
+          - pl
+          - pt-BR
+          - pt-PT
+          - rm
+          - ro
+          - ru
+          - sco
+          - si
+          - sk
+          - sl
+          - son
+          - sq
+          - sr
+          - sv-SE
+          - szl
+          - ta
+          - te
+          - th
+          - tl
+          - tr
+          - trs
+          - uk
+          - ur
+          - uz
+          - vi
+          - xh
+          - zh-CN
+          - zh-TW
+      firefox_path:
+        type: str
+        required: true
+        description: The directory for Firefox installs.
+...

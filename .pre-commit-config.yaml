@@ -8,26 +8,11 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
 ---
-galaxy_info:
-  role_name: firefox
-  namespace: chriscroome
-  author: Chris Croome
-  description: Ansible role for installing and updating multiple versions of Firefox and configuring Firejail on Debian and Ubuntu.
-  company: Webarchitects Co-operative
-  license: GNU General Public License v3.0
-  min_ansible_version: "2.10.7"
-  platforms:
-    - name: debian
-      versions:
-        - bookworm
-        - bullseye
-    - name: ubuntu
-      versions:
-        - focal
-  galaxy_tags:
-    - debian
-    - firefox
-    - firejail
-    - mozilla
-    - ubuntu
+# https://yamllint.readthedocs.io/en/stable/integration.html
+# https://github.com/adrienverge/yamllint/tags
+repos:
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
 ...
