@@ -27,7 +27,7 @@
       ansible.builtin.copy:
         src: 61B7B526D98F0353.asc
         dest: /root/61B7B526D98F0353.asc
-        mode: 0600
+        mode: "0600"
 
     - name: Mozilla Software Releases GPG key imported
       ansible.builtin.command: gpg --import /root/61B7B526D98F0353.asc

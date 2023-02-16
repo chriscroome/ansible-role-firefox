@@ -15,7 +15,7 @@
       ansible.builtin.file:
         path: "{{ firefox_download }}/{{ edition.product }}"
         state: directory
-        mode: 0700
+        mode: "0700"
         owner: root
         group: root
 
@@ -38,7 +38,7 @@
       ansible.builtin.get_url:
         url: "{{ firefox_head.location }}.asc"
         dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
-        mode: 0644
+        mode: "0644"
         owner: root
         group: root
       register: firefox_download_gpg_signature
@@ -50,7 +50,7 @@
           ansible.builtin.get_url:
             url: "{{ firefox_head.location }}"
             dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
-            mode: 0644
+            mode: "0644"
             owner: root
             group: root
 
@@ -75,7 +75,7 @@
           ansible.builtin.file:
             path: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
             state: directory
-            mode: 0700
+            mode: "0700"
             owner: root
             group: root
 
@@ -130,7 +130,7 @@
           ansible.builtin.template:
             src: firefox.sh.j2
             dest: "{{ firefox_bin }}/{{ edition.script }}"
-            mode: 0755
+            mode: "0755"
             owner: root
             group: root
 
@@ -138,7 +138,7 @@
           ansible.builtin.template:
             src: firefox.desktop.j2
             dest: "/usr/share/applications/{{ edition.product }}.desktop"
-            mode: 0644
+            mode: "0644"
             owner: root
             group: root
 
