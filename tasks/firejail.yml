@@ -33,6 +33,14 @@
           - firejail-profiles
       when: firefox_backports not in firefox_apt_cache_policy.stdout
 
+    - name: Enable U2F
+      ansible.builtin.lineinfile:
+        path: /etc/firejail/firejail.config
+        mode: "0644"
+        line: browser-disable-u2f no
+        regex: '^[#]?[ ]?browser-disable-u2f'
+        state: present
+
     - name: Firefox firejail latest profile in place
       ansible.builtin.template:
         src: firefox-latest.profile.j2
