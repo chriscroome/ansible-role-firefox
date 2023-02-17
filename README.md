@@ -130,7 +130,7 @@ Run Firefox in a firejail, `jail` is a boolean, it defaults to `true` for all ve
 
 By default this role configures the Firejail for all the versions that are installed to be run via [Firejail](https://github.com/netblue30/firejail), which is installed from [Debian backports](https://backports.debian.org/) if available.
 
-If you need to use WebAuthn (for example using a Yubikey) then you need to edit `/etc/firejail/firejail.config` to set:
+In order for WebAuthn to work (for example using a Yubikey) this role edits `/etc/firejail/firejail.config` to set:
 
 ```
 browser-disable-u2f no
