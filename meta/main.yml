@@ -17,11 +17,11 @@ galaxy_info:
   license: GNU General Public License v3.0
   min_ansible_version: "2.13"
   platforms:
-    - name: debian
+    - name: Debian
       versions:
         - bookworm
         - bullseye
-    - name: ubuntu
+    - name: Ubuntu
       versions:
         - focal
   galaxy_tags:

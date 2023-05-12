@@ -34,7 +34,7 @@
       register: firefox_gpg_import
       changed_when: ( "unchanged" not in firefox_gpg_import.stderr )
 
-    - name: Debug GPG key import
+    - name: Debug GPG key import  # noqa: no-handler
       ansible.builtin.debug:
         var: firefox_gpg_import
         verbosity: 2
