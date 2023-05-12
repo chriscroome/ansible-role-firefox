@@ -8,7 +8,7 @@ This is an Ansible role for installing and updating multiple Firefox versions on
 
 This role is designed to be run using `sudo` or as `root` and works by:
 
-1. Installing the [Mozilla Software Releases GPG key](https://blog.mozilla.org/security/2021/06/02/updating-gpg-key-for-signing-firefox-releases/).
+1. Installing the [Mozilla Software Releases GPG key](https://blog.mozilla.org/security/2023/05/11/updated-gpg-key-for-signing-firefox-releases/).
 2. Loading the [Firefox versions JSON](https://product-details.mozilla.org/1.0/firefox_versions.json).
 3. Checking the locally installed version and if the latest available version is newer then:
    - Downloading Firefox and the GPG signature.
