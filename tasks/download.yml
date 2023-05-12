@@ -41,7 +41,11 @@
         mode: "0644"
         owner: root
         group: root
-      register: firefox_download_gpg_signature
+
+    - name: "Check that the {{ edition.name }} GPG signature is present"
+      ansible.builtin.stat:
+        path: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}.asc"
+      register: firefox_gpg_signature_path
 
     - name: Download, check unarchive and install Firefox  # noqa: no-handler
       block:
@@ -79,72 +83,81 @@
             owner: root
             group: root
 
-        - name: "Unarchive {{ edition.name }}"
-          ansible.builtin.unarchive:
-            src: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
-            dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
-            remote_src: true
-            owner: root
-            group: root
-
-        - name: "Check if {{ edition.name }} has already been installed"
+        - name: "Check that {{ edition.name }} is present"
           ansible.builtin.stat:
-            path: "{{ firefox_path }}/{{ edition.path }}"
-          register: firefox_dest
+            path: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
+          register: firefox_download_path
 
-        - name: "Delete the old {{ edition.name }} and move the new version in place"
-          ansible.builtin.shell: |
-            set -e -o pipefail
-            rm -rf {{ firefox_path }}/{{ edition.path }}
-            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
-          args:
-            executable: "{{ firefox_bash.stdout }}"
-          changed_when: true
-          when: firefox_dest.stat.exists | bool
-
-        - name: "{{ edition.name }} in place"
-          ansible.builtin.shell: |
-            set -e -o pipefail
-            mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
-          args:
-            executable: "{{ firefox_bash.stdout }}"
-          register: firefox_in_place
-          changed_when: true
-          when: not firefox_dest.stat.exists | bool
-
-        - name: Update the CHANGELOG message
+        - name: Unarchive new Firefox version, delete old version and move the new version into place
           block:
 
-            - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version for Ansible < 2.13.0"
-              ansible.builtin.set_fact:
-                firefox_changelog: "{{ firefox_changelog }} + ['{{ firefox_changelog_msg }}']"
-              when: ansible_version.full is version('2.13.0', '<')
+            - name: "Unarchive {{ edition.name }}"
+              ansible.builtin.unarchive:
+                src: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_head.location | basename }}"
+                dest: "{{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}"
+                remote_src: true
+                owner: root
+                group: root
 
-            - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version for Ansible >= 2.13.0"
-              ansible.builtin.set_fact:
-                firefox_changelog: "{{ firefox_changelog + [firefox_changelog_msg] }}"
-              when: ansible_version.full is version('2.13.0', '>=')
+            - name: "Check if {{ edition.name }} has already been installed"
+              ansible.builtin.stat:
+                path: "{{ firefox_path }}/{{ edition.path }}"
+              register: firefox_dest
 
-          vars:
-            firefox_changelog_msg: "{{ edition.name }} {{ firefox_latest }} has been installed."
+            - name: "Delete the old {{ edition.name }} and move the new version in place"
+              ansible.builtin.shell: |-
+                set -e -o pipefail
+                rm -rf {{ firefox_path }}/{{ edition.path }} && \
+                mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
+              args:
+                executable: "{{ firefox_bash.stdout }}"
+              changed_when: true
+              when: firefox_dest.stat.exists | bool
 
-        - name: "{{ edition.name }} script in place"
-          ansible.builtin.template:
-            src: firefox.sh.j2
-            dest: "{{ firefox_bin }}/{{ edition.script }}"
-            mode: "0755"
-            owner: root
-            group: root
+            - name: "{{ edition.name }} in place"
+              ansible.builtin.shell: |-
+                set -e -o pipefail
+                mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
+              args:
+                executable: "{{ firefox_bash.stdout }}"
+              changed_when: true
+              when: not firefox_dest.stat.exists | bool
 
-        - name: "{{ edition.name }} desktop file in place"
-          ansible.builtin.template:
-            src: firefox.desktop.j2
-            dest: "/usr/share/applications/{{ edition.product }}.desktop"
-            mode: "0644"
-            owner: root
-            group: root
+            - name: Update the CHANGELOG message
+              block:
 
-      when: firefox_download_gpg_signature.changed | bool
+                - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version for Ansible < 2.13.0"
+                  ansible.builtin.set_fact:
+                    firefox_changelog: "{{ firefox_changelog }} + ['{{ firefox_changelog_msg }}']"
+                  when: ansible_version.full is version('2.13.0', '<')
+
+                - name: "Append a CHANGELOG message to say that {{ edition.name }} has been updated to the latest version for Ansible >= 2.13.0"
+                  ansible.builtin.set_fact:
+                    firefox_changelog: "{{ firefox_changelog + [firefox_changelog_msg] }}"
+                  when: ansible_version.full is version('2.13.0', '>=')
+
+              vars:
+                firefox_changelog_msg: "{{ edition.name }} {{ firefox_latest }} has been installed."
+
+            - name: "{{ edition.name }} script in place"
+              ansible.builtin.template:
+                src: firefox.sh.j2
+                dest: "{{ firefox_bin }}/{{ edition.script }}"
+                mode: "0755"
+                owner: root
+                group: root
+
+            - name: "{{ edition.name }} desktop file in place"
+              ansible.builtin.template:
+                src: firefox.desktop.j2
+                dest: "/usr/share/applications/{{ edition.product }}.desktop"
+                mode: "0644"
+                owner: root
+                group: root
+
+          when: firefox_download_path.stat.exists | bool
+
+      when: firefox_gpg_signature_path.stat.exists | bool
 
   tags:
     - firefox
