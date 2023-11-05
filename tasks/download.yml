@@ -118,7 +118,7 @@
                     rm -rf {{ firefox_path }}/{{ edition.path }} && \
                     mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
                   args:
-                    executable: "{{ firefox_bash.stdout }}"
+                    executable: "{{ ansible_local.bash.path | default('/bin/bash') }}"
                   changed_when: true
                   when: firefox_dest.stat.exists | bool
 
@@ -127,7 +127,7 @@
                     set -e -o pipefail
                     mv {{ firefox_download }}/{{ edition.product }}/{{ firefox_latest }}/firefox {{ firefox_path }}/{{ edition.path }}
                   args:
-                    executable: "{{ firefox_bash.stdout }}"
+                    executable: "{{ ansible_local.bash.path | default('/bin/bash') }}"
                   changed_when: true
                   when: not firefox_dest.stat.exists | bool
 

@@ -2,11 +2,11 @@
 
 [![pipeline status](https://git.coop/webarch/firefox/badges/main/pipeline.svg)](https://git.coop/webarch/firefox/-/commits/main)
 
-This is an Ansible role for installing and updating multiple Firefox versions on x86_64 and i386 Debian and Ubuntu GNU/Linux.
+This is an Ansible role for installing and updating multiple Firefox versions on x86_64 and i386 Debian and Ubuntu GNU/Linux, by default the [Mozilla apt repo is used for Firefox Nightly](https://blog.nightly.mozilla.org/2023/10/30/introducing-mozillas-firefox-nightly-deb-packages-for-debian-based-linux-distributions/) and binaries are downloaded and installed for the latest, beat and developer edition.
 
 ## Usage
 
-This role is designed to be run using `sudo` or as `root` and works by:
+This role configures the [Mozilla’s Firefox Nightly apt repo](https://blog.nightly.mozilla.org/2023/10/30/introducing-mozillas-firefox-nightly-deb-packages-for-debian-based-linux-distributions/) and for other Firefox versions it works by:
 
 1. Installing the [Mozilla Software Releases GPG key](https://blog.mozilla.org/security/2023/05/11/updated-gpg-key-for-signing-firefox-releases/).
 2. Loading the [Firefox versions JSON](https://product-details.mozilla.org/1.0/firefox_versions.json).
@@ -23,7 +23,7 @@ cd localhost
 ./firefox.sh
 ```
 
-# Role variables
+## Role variables
 
 See the [defaults/main.yml](defaults/main.yml) file for the default variables, the [vars/main.yml](vars/main.yml) file for the preset variables and the [meta/argument_specs.yml](meta/argument_specs.yml) file for the variable specification.
 
@@ -41,7 +41,7 @@ The temporary directory to use for downloading the Firefox archive, `firefox_dow
 
 ### firefox_editions
 
-A list of Firefox versions to install, for example for the latest stable release:
+A list of Firefox binary versions to install, for example for the latest stable release:
 
 ```yaml
 firefox_editions:
@@ -54,9 +54,9 @@ firefox_editions:
     jail: true
 ```
 
-By default the Firefox ESR version is not installed since this is provided by Debian.
+By default the Firefox ESR version is not installed since this is provided by Debian and Firefox Nightly is also not installed since it is provided by the apt repo.
 
-The `firefox_editions` list variables are:
+The `firefox_editions` list item variables are:
 
 #### name
 
@@ -126,15 +126,43 @@ Firefox version taken from the [Firefox JSON versions file](https://product-deta
 
 Run Firefox in a firejail, `jail` is a boolean, it defaults to `true` for all versions.
 
+### firefox_firejail
+
+A boolean, install and configure Firejail, `firefox_firejail` defaults to `true`.
+
+### firefox_lang
+
+The Firefox language, `firefox_lang` defaults to `en-GB`.
+
+### firefox_nightly_apt
+
+A boolean, install Firefox Nightly using `apt`, `firefox_nightly_apt` defaults to `true`.
+
+### firefox_nightly_apt_firejail
+
+Firejail the `apt` version of Firefox Nightly, `firefox_nightly_apt_firejail` defaults to `true`.
+
+### firefox_path
+
+The directory in which the Firefox binary versions should be installed, `firefox_path` defaults to `/opt`.
+
+### firefox_validate
+
+Validate all variables that start with `firefox_` using the argument specification.
+
 ## Firejail
 
 By default this role configures the Firejail for all the versions that are installed to be run via [Firejail](https://github.com/netblue30/firejail), which is installed from [Debian backports](https://backports.debian.org/) if available.
 
 In order for WebAuthn to work (for example using a Yubikey) this role edits `/etc/firejail/firejail.config` to set:
 
-```
+```ini
 browser-disable-u2f no
 ```
+
+## Profiles
+
+You can use the [Firefox Profile Manager](https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles) to manage and switch which version uses which profile.
 
 ## Repository
 

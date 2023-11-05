@@ -18,10 +18,36 @@ argument_specs:
         type: bool
         required: true
         description: Run the tasks in this role.
+      firefox_arch:
+        type: dict
+        required: true
+        description: Dictionary to map CPU architecture to Linux versions.
+        options:
+          x86_64:
+            type: str
+            required: true
+            description: Linux version.
+            choices:
+              - linux64
+          i386:
+            type: str
+            required: true
+            description: Linux version.
+            choices:
+              - linux
+      firefox_backports:
+        type: str
+        required: true
+        description: Debian version backports string.
       firefox_bin:
         type: str
         required: true
         description: The bin directory to use for Firefox.
+      firefox_changelog:
+        type: list
+        elements: str
+        required: false
+        description: A list of changes.
       firefox_download:
         type: str
         required: true
@@ -93,6 +119,27 @@ argument_specs:
         type: bool
         required: true
         description: Install firejail.
+      firefox_gpg_checksum:
+        type: str
+        required: true
+        description: Internal Firefox GPG checksum.
+      firefox_gpg_checksum_raw:
+        type: str
+        required: true
+        description: Internal Firefox GPG checksum including sha256 prefix.
+      firefox_gpg_fingerprints:
+        type: list
+        elements: str
+        required: true
+        description: A internal list of the fingerprints of the Firefox GPG key.
+      firefox_gpg_fingerprints_query:
+        type: str
+        required: true
+        description: A internal JMESPath query for the Firefox GPG fingerprints.
+      firefox_gpg_url:
+        type: str
+        required: true
+        description: A internal URL for the Firefox GPG key.
       firefox_lang:
         type: str
         required: true
@@ -107,11 +154,13 @@ argument_specs:
           - be
           - bg
           - bn
+          - bo
           - br
           - bs
           - ca
           - cak
           - ca-valencia
+          - ckb
           - cs
           - cy
           - da
@@ -156,8 +205,11 @@ argument_specs:
           - kn
           - ko
           - lij
+          - lo
           - lt
+          - ltg
           - lv
+          - meh
           - mk
           - mr
           - ms
@@ -174,9 +226,13 @@ argument_specs:
           - rm
           - ro
           - ru
+          - sat
+          - sc
+          - scn
           - sco
           - si
           - sk
+          - skr
           - sl
           - son
           - sq
@@ -185,6 +241,7 @@ argument_specs:
           - szl
           - ta
           - te
+          - tg
           - th
           - tl
           - tr
@@ -193,11 +250,142 @@ argument_specs:
           - ur
           - uz
           - vi
+          - wo
           - xh
           - zh-CN
           - zh-TW
+      firefox_nightly_apt:
+        type: bool
+        required: true
+        description: Use the Mozilla’s Firefox Nightly apt repo.
+      firefox_nightly_apt_firejail:
+        type: bool
+        required: true
+        description: Firejail Firefox Nightly apt version.
       firefox_path:
         type: str
         required: true
         description: The directory for Firefox installs.
+      firefox_pkg:
+        type: list
+        elements: str
+        required: true
+        description: The Firefox Nightly apt version.
+        choices:
+          - firefox-nightly
+          - firefox-nightly-l10n-ach
+          - firefox-nightly-l10n-af
+          - firefox-nightly-l10n-an
+          - firefox-nightly-l10n-ar
+          - firefox-nightly-l10n-ast
+          - firefox-nightly-l10n-az
+          - firefox-nightly-l10n-be
+          - firefox-nightly-l10n-bg
+          - firefox-nightly-l10n-bn
+          - firefox-nightly-l10n-bo
+          - firefox-nightly-l10n-br
+          - firefox-nightly-l10n-brx
+          - firefox-nightly-l10n-bs
+          - firefox-nightly-l10n-ca
+          - firefox-nightly-l10n-cak
+          - firefox-nightly-l10n-ca-valencia
+          - firefox-nightly-l10n-ckb
+          - firefox-nightly-l10n-cs
+          - firefox-nightly-l10n-cy
+          - firefox-nightly-l10n-da
+          - firefox-nightly-l10n-de
+          - firefox-nightly-l10n-dsb
+          - firefox-nightly-l10n-el
+          - firefox-nightly-l10n-en-ca
+          - firefox-nightly-l10n-en-gb
+          - firefox-nightly-l10n-eo
+          - firefox-nightly-l10n-es-ar
+          - firefox-nightly-l10n-es-cl
+          - firefox-nightly-l10n-es-es
+          - firefox-nightly-l10n-es-mx
+          - firefox-nightly-l10n-et
+          - firefox-nightly-l10n-eu
+          - firefox-nightly-l10n-fa
+          - firefox-nightly-l10n-ff
+          - firefox-nightly-l10n-fi
+          - firefox-nightly-l10n-fr
+          - firefox-nightly-l10n-fur
+          - firefox-nightly-l10n-fy-nl
+          - firefox-nightly-l10n-ga-ie
+          - firefox-nightly-l10n-gd
+          - firefox-nightly-l10n-gl
+          - firefox-nightly-l10n-gn
+          - firefox-nightly-l10n-gu-in
+          - firefox-nightly-l10n-he
+          - firefox-nightly-l10n-hi-in
+          - firefox-nightly-l10n-hr
+          - firefox-nightly-l10n-hsb
+          - firefox-nightly-l10n-hu
+          - firefox-nightly-l10n-hy-am
+          - firefox-nightly-l10n-hye
+          - firefox-nightly-l10n-ia
+          - firefox-nightly-l10n-id
+          - firefox-nightly-l10n-is
+          - firefox-nightly-l10n-it
+          - firefox-nightly-l10n-ja
+          - firefox-nightly-l10n-ka
+          - firefox-nightly-l10n-kab
+          - firefox-nightly-l10n-kk
+          - firefox-nightly-l10n-km
+          - firefox-nightly-l10n-kn
+          - firefox-nightly-l10n-ko
+          - firefox-nightly-l10n-lij
+          - firefox-nightly-l10n-lo
+          - firefox-nightly-l10n-lt
+          - firefox-nightly-l10n-ltg
+          - firefox-nightly-l10n-lv
+          - firefox-nightly-l10n-meh
+          - firefox-nightly-l10n-mk
+          - firefox-nightly-l10n-mr
+          - firefox-nightly-l10n-ms
+          - firefox-nightly-l10n-my
+          - firefox-nightly-l10n-nb-no
+          - firefox-nightly-l10n-ne-np
+          - firefox-nightly-l10n-nl
+          - firefox-nightly-l10n-nn-no
+          - firefox-nightly-l10n-oc
+          - firefox-nightly-l10n-pa-in
+          - firefox-nightly-l10n-pl
+          - firefox-nightly-l10n-pt-br
+          - firefox-nightly-l10n-pt-pt
+          - firefox-nightly-l10n-rm
+          - firefox-nightly-l10n-ro
+          - firefox-nightly-l10n-ru
+          - firefox-nightly-l10n-sat
+          - firefox-nightly-l10n-sc
+          - firefox-nightly-l10n-scn
+          - firefox-nightly-l10n-sco
+          - firefox-nightly-l10n-si
+          - firefox-nightly-l10n-sk
+          - firefox-nightly-l10n-skr
+          - firefox-nightly-l10n-sl
+          - firefox-nightly-l10n-son
+          - firefox-nightly-l10n-sq
+          - firefox-nightly-l10n-sr
+          - firefox-nightly-l10n-sv-se
+          - firefox-nightly-l10n-szl
+          - firefox-nightly-l10n-ta
+          - firefox-nightly-l10n-te
+          - firefox-nightly-l10n-tg
+          - firefox-nightly-l10n-th
+          - firefox-nightly-l10n-tl
+          - firefox-nightly-l10n-tr
+          - firefox-nightly-l10n-trs
+          - firefox-nightly-l10n-uk
+          - firefox-nightly-l10n-ur
+          - firefox-nightly-l10n-uz
+          - firefox-nightly-l10n-vi
+          - firefox-nightly-l10n-wo
+          - firefox-nightly-l10n-xh
+          - firefox-nightly-l10n-zh-cn
+          - firefox-nightly-l10n-zh-tw
+      firefox_validate:
+        type: bool
+        required: true
+        description: Use ansible.builtin.validate_argument_spec module to validate role argument specs.
 ...

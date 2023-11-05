@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+{% for firefox_p in firefox_pkg %}
+Package: {{ firefox_p }}
+Pin: origin packages.mozilla.org
+Pin-Priority: 500
+
+{% endfor %}

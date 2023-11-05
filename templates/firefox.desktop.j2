@@ -1,16 +1,29 @@
 # {{ ansible_managed }}
+
 [Desktop Entry]
-Name={{ edition.name }}
-Comment=Browse the World Wide Web
-GenericName=Web Browser
-X-GNOME-FullName={{ edition.name }} Web Browser
-Exec={{ firefox_bin }}/{{ edition.script }}
+Version=1.0
+Exec={{ firefox_bin }}/{{ edition.script }} %u
 Terminal=false
 X-MultipleArgs=false
 Type=Application
 Icon={{ firefox_path }}/{{ edition.path }}/browser/chrome/icons/default/default128.png
-Categories=Network;WebBrowser;
-MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/vnd.mozilla.xul+xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png;x-scheme-handler/http;x-scheme-handler/https;
 StartupWMClass={{ edition.product }}
+Categories=GNOME;GTK;Network;WebBrowser;
+MimeType=application/json;application/pdf;application/rdf+xml;application/rss+xml;application/x-xpinstall;application/xhtml+xml;application/xml;audio/flac;audio/ogg;audio/webm;image/avif;image/gif;image/jpeg;image/png;image/svg+xml;image/webp;text/html;text/xml;video/ogg;video/webm;x-scheme-handler/chrome;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/mailto;
 StartupNotify=true
+Actions=new-window;new-private-window;open-profile-manager;
+Name={{ edition.name }}
+Comment=Browse the World Wide Web
+GenericName=Web Browser
+Keywords=Internet;WWW;Browser;Web;Explorer;
+X-GNOME-FullName={{ edition.name }} Web Browser
+
+[Desktop Action new-window]
+Exec={{ firefox_bin }}/{{ edition.script }} --new-window %u
+Name=New Window
+
+[Desktop Action new-private-window]
+Exec={{ firefox_bin }}/{{ edition.script }} --private-window %u
+Name=New Private Window
+
 # vim: set ft=desktop:

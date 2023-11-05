@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+# {{ ansible_managed }}
 
 if [[ "${XDG_SESSION_TYPE}" == "wayland" ]]; then
   export MOZ_ENABLE_WAYLAND=1
 fi
 
-{% if firefox_firejail | bool and edition.jail | bool %}firejail {%endif%}{{ firefox_path }}/{{ edition.path }}/firefox
+/usr/bin/firefox-nightly
 
 # vim: set ft=bash:

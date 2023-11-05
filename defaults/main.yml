@@ -23,29 +23,33 @@ firefox_editions:
     product: firefox-latest
     script: firefox
     version: LATEST_FIREFOX_VERSION
-    jail: true
+    jail: "{{ firefox_firejail }}"
   - name: Firefox Beta
     channel: desktop_beta
     path: firefox-beta
     product: firefox-beta-latest
     script: firefox-beta
     version: LATEST_FIREFOX_DEVEL_VERSION
-    jail: true
+    jail: "{{ firefox_firejail }}"
   - name: Firefox Developer Edition
     channel: desktop_developer
     path: firefox-developer-edition
     product: firefox-devedition-latest
     script: firefox-dev
     version: FIREFOX_DEVEDITION
-    jail: true
-  - name: Firefox Nightly
-    channel: desktop_nightly
-    path: firefox-nightly
-    product: firefox-nightly-latest
-    script: firefox-nightly
-    version: FIREFOX_NIGHTLY
-    jail: true
+    jail: "{{ firefox_firejail }}"
+  # Firefox Nightly apt package is used when firefox_nightly_apt is true
+  # - name: Firefox Nightly
+  #   channel: desktop_nightly
+  #   path: firefox-nightly
+  #   product: firefox-nightly-latest
+  #   script: firefox-nightly
+  #   version: FIREFOX_NIGHTLY
+  #   jail: "{{ firefox_firejail }}"
 firefox_firejail: true
 firefox_lang: en-GB
+firefox_nightly_apt: true
+firefox_nightly_apt_firejail: "{{ firefox_firejail }}"
 firefox_path: /opt
+firefox_validate: true
 ...

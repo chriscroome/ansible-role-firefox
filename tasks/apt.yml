@@ -1,0 +1,145 @@
+# Copyright 2022-2023 Chris Croome
+#
+# This file is part of the Webarchitects Firefox Ansible role.
+#
+# The Webarchitects Firefox Ansible role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects Firefox Ansible role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
+---
+- name: Firefox Nightly apt configuration
+  block:
+
+    - name: Apt keyrings directory present
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+        owner: root
+        group: root
+
+    - name: Download and check the Firefox Nightly gpg key when not in check mode
+      block:
+
+        - name: Firefox Nightly gpg asc key downloaded
+          ansible.builtin.get_url:
+            url: "{{ firefox_gpg_url }}"
+            dest: /root/firefox.asc
+            force: true
+            mode: "0644"
+            owner: root
+            group: root
+          changed_when: false
+
+        - name: Stat Firefox Nightly gpg ascii armored file
+          ansible.builtin.stat:
+            path: /root/firefox.asc
+            checksum_algorithm: sha256
+          register: firefox_asc_file
+
+        - name: Check the Firefox Nightly gpg ascii armored file sha256sum
+          ansible.builtin.assert:
+            that:
+              - firefox_asc_file.stat.checksum == firefox_gpg_checksum_raw
+            quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
+
+        - name: Firefox Nightly gpg key dearmored
+          ansible.builtin.shell: |-
+            set -e -o pipefail
+            gpg --dearmor < /root/firefox.asc > /etc/apt/keyrings/firefox.gpg
+            chmod 644 /etc/apt/keyrings/firefox.gpg
+          args:
+            executable: "{{ ansible_local.bash.path }}"
+          changed_when: false
+
+        - name: Stat Firefox Nightly gpg dearmored file
+          ansible.builtin.stat:
+            path: /etc/apt/keyrings/firefox.gpg
+          register: firefox_gpg_file
+
+        - name: Firefox Nightly gpg key check command
+          ansible.builtin.command: >
+            gpg --with-colons
+            {% if ansible_local.gpg.version is version('2.2.12', '<') %}
+            --with-fingerprint --with-subkey-fingerprint
+            {% else %}
+            --show-keys
+            {% endif %}
+            /etc/apt/keyrings/firefox.gpg
+          when: (firefox_gpg_file.stat.exists | bool)
+          check_mode: false
+          changed_when: false
+          register: firefox_gpg
+
+        - name: Set a fact for the Firefox Nightly GPG fingerprints on the server
+          ansible.builtin.set_fact:
+            firefox_gpg_fingerprints_found: "{{ firefox_gpg.stdout | string | community.general.jc('gpg') | community.general.json_query(firefox_gpg_fingerprints_query) | list }}"
+
+        - name: Firefox Nightly gpg key check first fingerprint for GPG versions less that 2.2.12
+          ansible.builtin.assert:
+            that:
+              - firefox_gpg_fingerprints_found[0] == firefox_gpg_fingerprints[0]
+            quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
+          when: ansible_local.gpg.version is version('2.2.12', '<')
+
+        - name: Firefox Nightly gpg key check all fingerprints
+          ansible.builtin.assert:
+            that:
+              - firefox_gpg_fingerprints_found | difference(firefox_gpg_fingerprints) | length == 0
+              - firefox_gpg_fingerprints | difference(firefox_gpg_fingerprints_found) | length == 0
+            quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
+          when: ansible_local.gpg.version is version('2.2.12', '>=')
+
+      when: (not ansible_check_mode | bool)
+
+    - name: Firefox Nightly repository sources file present
+      ansible.builtin.template:
+        src: firefox.sources.j2
+        dest: /etc/apt/sources.list.d/firefox.sources
+        mode: "0644"
+        owner: root
+        group: root
+      register: firefox_sources
+
+    - name: Firefox Nightly apt preferences present
+      ansible.builtin.template:
+        src: firefox.pref.j2
+        dest: /etc/apt/preferences.d/firefox.pref
+        mode: "0644"
+        owner: root
+        group: root
+      register: firefox_preferences
+
+    - name: Firefox Nightly present
+      ansible.builtin.apt:
+        pkg: "firefox-nightly{% if firefox_lang != 'en' %}-l10n-{{ firefox_lang | lower }}{% endif %}"
+        install_recommends: true
+        state: present
+        update_cache: true
+        cache_valid_time: 0
+
+    - name: Firejail Firefox Nightly
+      block:
+
+        - name: Firefox Nightly Firejail script in place
+          ansible.builtin.template:
+            src: firefox-nightly.sh.j2
+            dest: "{{ firefox_bin }}/firefox-nightly"
+            mode: "0755"
+            owner: root
+            group: root
+
+        - name: "{{ edition.name }} desktop file in place"
+          ansible.builtin.template:
+            src: firefox-nightly.desktop.j2
+            dest: /usr/share/applications/firefox-nightly.desktop
+            mode: "0644"
+            owner: root
+            group: root
+
+      when: firefox_nightly_apt_firejail | bool
+
+  tags:
+    - firefox
+...

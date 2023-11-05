@@ -8,8 +8,28 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
 ---
+- name: Skip the tasks in this role as firefox is false
+  ansible.builtin.debug:
+    msg: "The firefox variable need to be true for the tasks in this role to run."
+  when: not firefox | bool
+  tags:
+    - firefox
+
 - name: Install and upgrade Firefox
   block:
+
+    - name: Validate Firefox variables
+      ansible.builtin.include_tasks: validate.yml
+      when: firefox_validate | bool
+
+    - name: Include apt role local fact tasks if variables are not defined
+      ansible.builtin.include_role:
+        name: apt
+        tasks_from: local_facts.yml
+      when: >-
+        ( ansible_local.dpkg.arch is not defined ) or
+        ( ansible_local.gpg.version is not defined ) or
+        ( ansible_local.bash.path is not defined )
 
     - name: Requirements present
       ansible.builtin.apt:
@@ -17,11 +37,9 @@
           - gnupg
         state: present
 
-    - name: Which Bash
-      ansible.builtin.command: which bash
-      check_mode: false
-      changed_when: false
-      register: firefox_bash
+    - name: Include the Firefox apt repo tasks
+      ansible.builtin.include_tasks: apt.yml
+      when: firefox_nightly_apt | bool
 
     - name: Mozilla Software Releases GPG key present
       ansible.builtin.copy:

@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+Types: deb
+URIs: https://packages.mozilla.org/apt
+Suites: mozilla
+Architectures: {{ ansible_facts.ansible_local.dpkg.arch }}
+Components: main
+Signed-By: /etc/apt/keyrings/firefox.gpg
