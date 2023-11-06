@@ -31,11 +31,12 @@
         ( ansible_local.gpg.version is not defined ) or
         ( ansible_local.bash.path is not defined )
 
-    - name: Requirements present
+    - name: GNUPG present
       ansible.builtin.apt:
         pkg:
           - gnupg
         state: present
+        update_cache: true
 
     - name: Include the Firefox apt repo tasks
       ansible.builtin.include_tasks: apt.yml
