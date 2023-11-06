@@ -79,10 +79,6 @@
       ansible.builtin.debug:
         var: molecule_firefox_versions.json.LATEST_FIREFOX_VERSION
 
-    - name: Debug firefox_versions.json.FIREFOX_DEVEDITION
-      ansible.builtin.debug:
-        var: molecule_firefox_versions.json.FIREFOX_DEVEDITION
-
     - name: Debug firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
       ansible.builtin.debug:
         var: molecule_firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
@@ -92,5 +88,5 @@
         that:
           - molecule_firefox_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_VERSION, 'eq')
           - molecule_firefox_beta_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_RELEASED_DEVEL_VERSION, 'eq')
-          - molecule_firefox_dev_ver is ansible.builtin.version(molecule_firefox_versions.json.FIREFOX_DEVEDITION, 'eq')
+          - molecule_firefox_dev_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_RELEASED_DEVEL_VERSION, 'eq')
 ...
