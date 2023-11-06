@@ -50,59 +50,15 @@
         state: present
         update_cache: true
 
-    - name: Include the Firefox apt repo tasks
+    - name: Include the Firefox Nightly apt repo tasks
       ansible.builtin.include_tasks: apt.yml
       when: firefox_nightly_apt | bool
 
-    - name: Mozilla Software Releases GPG key present
-      ansible.builtin.copy:
-        src: 61B7B526D98F0353.asc
-        dest: /root/61B7B526D98F0353.asc
-        mode: "0600"
-
-    - name: Mozilla Software Releases GPG key imported
-      ansible.builtin.command: gpg --import /root/61B7B526D98F0353.asc
-      register: firefox_gpg_import
-      changed_when: ( "unchanged" not in firefox_gpg_import.stderr )
-
-    - name: Debug GPG key import  # noqa: no-handler
-      ansible.builtin.debug:
-        var: firefox_gpg_import.stderr_lines
-        verbosity: 2
-      when: >-
-        ( firefox_gpg_import.stderr_lines is defined ) and
-        ( firefox_gpg_import.stderr_lines != [] ) and
-        ( ( firefox_gpg_import.changed | bool ) or
-        ( ( firefox_gpg_import.skipped is defined ) and
-        ( not firefox_gpg_import.skipped | bool ) ) )
-
-    - name: Download the Firefox versions JSON
-      ansible.builtin.uri:
-        url: https://product-details.mozilla.org/1.0/firefox_versions.json
-        force: true
-        return_content: true
-        status_code:
-          - 200
-      check_mode: false
-      changed_when: false
-      register: firefox_versions
-
-    - name: Debug Firefox versions type debug
-      ansible.builtin.debug:
-        msg: "{{ firefox_versions.json | type_debug }}"
-        verbosity: 3
-
-    - name: Debug Firefox versions JSON
-      ansible.builtin.debug:
-        var: firefox_versions.json
-        verbosity: "{% if ansible_check_mode | bool %}0{% else %}1{% endif %}"
-
-    - name: Include tasks for each version of Firefox
-      ansible.builtin.include_tasks: version.yml
-      loop: "{{ firefox_editions }}"
-      loop_control:
-        loop_var: edition
-        label: "{{ edition.script }}"
+    - name: Include the Firefox binary editions tasks
+      ansible.builtin.include_tasks: editions.yml
+      when:
+        - firefox_editions is defined
+        - firefox_editions | length > 0
 
     - name: Include firejail tasks
       ansible.builtin.include_tasks: firejail.yml

@@ -122,6 +122,12 @@
     - name: Firejail Firefox Nightly
       block:
 
+        # The Firejail firefox-nightly.local file is only needed for the binary version, not the .deb version
+        - name: Firefox Nightly firejail local profile absent
+          ansible.builtin.file:
+            path: /etc/firejail/firefox-nightly.local
+            state: absent
+
         - name: Firefox Nightly Firejail script in place
           ansible.builtin.template:
             src: firefox-nightly.sh.j2
