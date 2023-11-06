@@ -130,7 +130,7 @@
             owner: root
             group: root
 
-        - name: "{{ edition.name }} desktop file in place"
+        - name: Firefox Nightly desktop file in place
           ansible.builtin.template:
             src: firefox-nightly.desktop.j2
             dest: /usr/share/applications/firefox-nightly.desktop
