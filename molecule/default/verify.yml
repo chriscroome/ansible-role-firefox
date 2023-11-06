@@ -18,18 +18,8 @@
     ansible_python_interpreter: /usr/bin/python3
   tasks:
 
-    - name: Run which firefox
-      ansible.builtin.command: which firefox
-      check_mode: false
-      changed_when: false
-      register: molecule_which_firefox
-
-    - name: Debug which firefox
-      ansible.builtin.debug:
-        var: molecule_which_firefox.stdout
-
     - name: Run firefox --version
-      ansible.builtin.command: "{{ molecule_which_firefox.stdout }} --version"
+      ansible.builtin.command: /opt/firefox-nightly/firefox --version
       check_mode: false
       changed_when: false
       register: molecule_firefox_version
@@ -37,5 +27,35 @@
     - name: Debug firefox --version
       ansible.builtin.debug:
         var: molecule_firefox_version.stdout
+
+    - name: Run firefox-beta --version
+      ansible.builtin.command: /opt/firefox-beta/firefox --version
+      check_mode: false
+      changed_when: false
+      register: molecule_firefox_beta_version
+
+    - name: Debug firefox-beta --version
+      ansible.builtin.debug:
+        var: molecule_firefox_beta_version.stdout
+
+    - name: Run firefox-dev --version
+      ansible.builtin.command: /opt/firefox-developer-edition/firefox --version
+      check_mode: false
+      changed_when: false
+      register: molecule_firefox_dev_version
+
+    - name: Debug firefox-dev --version
+      ansible.builtin.debug:
+        var: molecule_firefox_dev_version.stdout
+
+    - name: Run firefox-nightly --version
+      ansible.builtin.command: /usr/bin/firefox-nightly --version
+      check_mode: false
+      changed_when: false
+      register: molecule_firefox_nightly_version
+
+    - name: Debug firefox --version
+      ansible.builtin.debug:
+        var: molecule_firefox_nightly_version.stdout
 
 ...

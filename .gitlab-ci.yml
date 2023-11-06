@@ -14,8 +14,8 @@ variables:
   ANSIBLE_FORCE_COLOR: "1"
   ANSIBLE_REMOTE_TMP: "/tmp"
   ANSIBLE_SHELL_ALLOW_WORLD_READABLE_TEMP: "1"
+  DEBIAN_FRONTEND: "noninteractive"
   DEFAULT_MANAGED_STR: "Ansible managed"
-  DISPLAY: ":1"
   MOLECULE_VERBOSITY: "0"
   PY_COLORS: "1"
 before_script:
@@ -27,7 +27,6 @@ before_script:
   - yamllint --version
   - which molecule
   - molecule --version
-  - apt install -yqqq  xserver-xorg-video-dummy
 stages:
   - bookworm
   - trixie
