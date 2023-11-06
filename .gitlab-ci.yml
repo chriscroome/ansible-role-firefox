@@ -24,10 +24,10 @@ before_script:
   - which ansible
   - ansible --version
   - which yamllint
-
   - yamllint --version
   - which molecule
   - molecule --version
+  - apt install -yqqq  xserver-xorg-video-dummy
 stages:
   - bookworm
   - trixie
