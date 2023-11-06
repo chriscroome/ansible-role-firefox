@@ -22,6 +22,18 @@
       ansible.builtin.include_tasks: validate.yml
       when: firefox_validate | bool
 
+    - name: Check that Firefox Nightly is not to be installed via a binary and a .deb package at the same time
+      ansible.builtin.assert:
+        that:
+          - ( "FIREFOX_NIGHTLY" not in firefox_editions | community.general.json_query('[].version') )
+          - ( "Firefox Nightly" not in firefox_editions | community.general.json_query('[].name') )
+          - ( "desktop_nightly" not in firefox_editions | community.general.json_query('[].channel') )
+          - ( "firefox-nightly" not in firefox_editions | community.general.json_query('[].path') )
+          - ( "firefox-nightly" not in firefox_editions | community.general.json_query('[].script') )
+          - ( "firefox-nightly-latest" not in firefox_editions | community.general.json_query('[].product') )
+        quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
+      when: firefox_nightly_apt | bool
+
     - name: Include apt role local fact tasks if variables are not defined
       ansible.builtin.include_role:
         name: apt
