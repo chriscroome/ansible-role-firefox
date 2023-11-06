@@ -2,7 +2,7 @@
 
 [![pipeline status](https://git.coop/webarch/firefox/badges/main/pipeline.svg)](https://git.coop/webarch/firefox/-/commits/main)
 
-This is an Ansible role for installing and updating multiple Firefox versions on x86_64 and i386 Debian and Ubuntu GNU/Linux, by default the [Mozilla apt repo is used for Firefox Nightly](https://blog.nightly.mozilla.org/2023/10/30/introducing-mozillas-firefox-nightly-deb-packages-for-debian-based-linux-distributions/) and binaries are downloaded and installed for the latest, beat and developer edition.
+This is an Ansible role for installing and updating multiple Firefox versions on x86_64 and i386 Debian and Ubuntu GNU/Linux, by default the [Mozilla apt repo is used for Firefox Nightly](https://blog.nightly.mozilla.org/2023/10/30/introducing-mozillas-firefox-nightly-deb-packages-for-debian-based-linux-distributions/) and binaries are downloaded and installed for the latest, beta and developer edition.
 
 ## Usage
 
