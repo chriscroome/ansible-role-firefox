@@ -95,7 +95,7 @@
     - name: Debug Firefox versions JSON
       ansible.builtin.debug:
         var: firefox_versions.json
-        verbosity: 2
+        verbosity: "{% if ansible_check_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Include tasks for each version of Firefox
       ansible.builtin.include_tasks: version.yml

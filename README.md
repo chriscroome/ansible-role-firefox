@@ -162,7 +162,7 @@ browser-disable-u2f no
 
 ## Profiles
 
-You can use the [Firefox Profile Manager](https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles) to manage and switch which version uses which profile.
+You can use the [Firefox Profile Manager](https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles) to manage and switch which version uses which profile, type `about:profiles` in the address bar to access the Profile Manager.
 
 ## Repository
 

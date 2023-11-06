@@ -89,11 +89,23 @@
       ansible.builtin.debug:
         var: molecule_firefox_versions.json
 
+    - name: Debug firefox_versions.json.LATEST_FIREFOX_VERSION
+      ansible.builtin.debug:
+        var: molecule_firefox_versions.json.LATEST_FIREFOX_VERSION
+
+    - name: Debug firefox_versions.json.FIREFOX_DEVEDITION
+      ansible.builtin.debug:
+        var: molecule_firefox_versions.json.FIREFOX_DEVEDITION
+
+    - name: Debug firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
+      ansible.builtin.debug:
+        var: molecule_firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
+
     - name: Assert that the versions installed are the latest versions available
       ansible.builtin.assert:
         that:
           - molecule_firefox_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_VERSION, 'eq')
           - molecule_firefox_beta_ver is ansible.builtin.version(molecule_firefox_versions.json.FIREFOX_DEVEDITION, 'eq')
-          - molecule_firefox_dev_ver is ansible.builtin.version(molecule_firefox_versions.json.FIREFOX_DEVEDITION 'eq')
+          - molecule_firefox_dev_ver is ansible.builtin.version(molecule_firefox_versions.json.FIREFOX_DEVEDITION, 'eq')
           - molecule_firefox_nightly_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION, 'eq')
 ...
