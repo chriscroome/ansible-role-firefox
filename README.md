@@ -2,9 +2,7 @@
 
 [![pipeline status](https://git.coop/webarch/firefox/badges/main/pipeline.svg)](https://git.coop/webarch/firefox/-/commits/main)
 
-This is an Ansible role for installing and updating multiple Firefox versions on x86_64 and i386 Debian and Ubuntu GNU/Linux, by default the Mozilla apt repo is used for Firefox Nightly and binaries are downloaded and installed for the latest, beta and developer editions of Firefox.
-
-## Usage
+This is an Ansible role for installing and updating multiple Firefox versions on x86_64 and i386 Debian and Ubuntu GNU/Linux, by default the Mozilla apt repo is used for Firefox Nightly and binaries are downloaded and installed for the Latest, Beta and Developer editions of Firefox.
 
 This role configures the [Mozilla’s Firefox Nightly apt repo](https://blog.nightly.mozilla.org/2023/10/30/introducing-mozillas-firefox-nightly-deb-packages-for-debian-based-linux-distributions/) and for other Firefox versions it works by:
 
@@ -14,6 +12,8 @@ This role configures the [Mozilla’s Firefox Nightly apt repo](https://blog.nig
    - Downloading Firefox and the GPG signature.
    - Verifying the downloaded files using the GPG signature.
    - Installing Firefox in `/opt`, adding a script to launch it in `/usr/local/bin` and creating a `.desktop` file in `/usr/share/applications`.
+
+## Usage
 
 The suggested method for using this role is via the [localhost repo](https://git.coop/webarch/localhost) which contains a [firefox.sh](https://git.coop/webarch/localhost/-/blob/main/firefox.sh) script that will download this role and run it, for example:
 
@@ -56,6 +56,8 @@ firefox_editions:
 ```
 
 By default the Firefox ESR version is not installed since this is provided by Debian and Firefox Nightly is also not installed since it is provided by the apt repo.
+
+If `firefox_editions` is set to an empty list, `[]` then the Firefox binary install tasks will be skipped, do this to use this role to just configure the Mozilla apt repo Firefox Nightly.
 
 The `firefox_editions` list item variables are:
 

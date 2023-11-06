@@ -1,0 +1,96 @@
+# Copyright 2022-2023 Chris Croome
+#
+# This file is part of the Webarchitects Firefox Ansible role.
+#
+# The Webarchitects Firefox Ansible role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects Firefox Ansible role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
+---
+- name: Verify as root
+  # become: true
+  connection: local
+  # gather_facts: true
+  hosts:
+    - localhost
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+
+    - name: Run firefox --version
+      ansible.builtin.command: /opt/firefox-latest/firefox --version
+      check_mode: false
+      changed_when: false
+      register: molecule_firefox_version
+
+    - name: Set a fact for the firefox version
+      ansible.builtin.set_fact:
+        molecule_firefox_ver: "{{ molecule_firefox_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+
+    - name: Debug firefox --version
+      ansible.builtin.debug:
+        var: molecule_firefox_ver
+
+    - name: Run firefox-beta --version
+      ansible.builtin.command: /opt/firefox-beta/firefox --version
+      check_mode: false
+      changed_when: false
+      register: molecule_firefox_beta_version
+
+    - name: Set a fact for the firefox-beta version
+      ansible.builtin.set_fact:
+        molecule_firefox_beta_ver: "{{ molecule_firefox_beta_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+
+    - name: Debug firefox-beta --version
+      ansible.builtin.debug:
+        var: molecule_firefox_beta_ver
+
+    - name: Run firefox-dev --version
+      ansible.builtin.command: /opt/firefox-developer-edition/firefox --version
+      check_mode: false
+      changed_when: false
+      register: molecule_firefox_dev_version
+
+    - name: Set a fact for the firefox-dev version
+      ansible.builtin.set_fact:
+        molecule_firefox_dev_ver: "{{ molecule_firefox_dev_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+
+    - name: Debug firefox-dev --version
+      ansible.builtin.debug:
+        var: molecule_firefox_dev_ver
+
+    - name: Download the Firefox versions JSON
+      ansible.builtin.uri:
+        url: https://product-details.mozilla.org/1.0/firefox_versions.json
+        force: true
+        return_content: true
+        status_code:
+          - 200
+      check_mode: false
+      changed_when: false
+      register: molecule_firefox_versions
+
+    - name: Debug firefox_versions.json
+      ansible.builtin.debug:
+        var: molecule_firefox_versions.json
+
+    - name: Debug firefox_versions.json.LATEST_FIREFOX_VERSION
+      ansible.builtin.debug:
+        var: molecule_firefox_versions.json.LATEST_FIREFOX_VERSION
+
+    - name: Debug firefox_versions.json.FIREFOX_DEVEDITION
+      ansible.builtin.debug:
+        var: molecule_firefox_versions.json.FIREFOX_DEVEDITION
+
+    - name: Debug firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
+      ansible.builtin.debug:
+        var: molecule_firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
+
+    - name: Assert that the versions installed are the latest versions available
+      ansible.builtin.assert:
+        that:
+          - molecule_firefox_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_VERSION, 'eq')
+          - molecule_firefox_beta_ver is ansible.builtin.version(molecule_firefox_versions.json.FIREFOX_DEVEDITION, 'eq')
+          - molecule_firefox_dev_ver is ansible.builtin.version(molecule_firefox_versions.json.FIREFOX_DEVEDITION, 'eq')
+...
