@@ -19,7 +19,7 @@
   tasks:
 
     - name: Run firefox --version
-      ansible.builtin.command: /opt/firefox/firefox --version
+      ansible.builtin.command: /opt/firefox-latest/firefox --version
       check_mode: false
       changed_when: false
       register: molecule_firefox_version
