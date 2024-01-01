@@ -29,6 +29,7 @@ before_script:
   - which molecule
   - molecule --version
   # libdbus-glib-1-2 is required by jammy
+  - apt update
   - apt -yq install libdbus-glib-1-2
 stages:
   - bookworm
