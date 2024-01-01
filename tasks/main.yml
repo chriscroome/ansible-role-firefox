@@ -43,10 +43,15 @@
         ( ansible_local.gpg.version is not defined ) or
         ( ansible_local.bash.path is not defined )
 
-    - name: GNUPG present
+    - name: GNUPG and fonts present
       ansible.builtin.apt:
         pkg:
+          - fonts-lmodern
+          - fonts-stix
           - gnupg
+          - xfonts-100dpi
+          - xfonts-75dpi
+          - xfonts-scalable
         state: present
         update_cache: true
         cache_valid_time: 0
