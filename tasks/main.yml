@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Chris Croome
+# Copyright 2022-2024 Chris Croome
 #
 # This file is part of the Webarchitects Firefox Ansible role.
 #
@@ -49,6 +49,7 @@
           - gnupg
         state: present
         update_cache: true
+        cache_valid_time: 0
 
     - name: Include the Firefox Nightly apt repo tasks
       ansible.builtin.include_tasks: apt.yml

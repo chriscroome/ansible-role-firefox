@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Chris Croome
+# Copyright 2022-2024 Chris Croome
 #
 # This file is part of the Webarchitects Firefox Ansible role.
 #
@@ -21,6 +21,7 @@ variables:
 before_script:
   - whoami
   - pwd
+  - chmod 700 $(pwd)
   - which ansible
   - ansible --version
   - which yamllint

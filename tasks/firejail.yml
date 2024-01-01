@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Chris Croome
+# Copyright 2022-2024 Chris Croome
 #
 # This file is part of the Webarchitects Firefox Ansible role.
 #
@@ -23,6 +23,8 @@
           - firejail
           - firejail-profiles
         state: latest
+        update_cache: true
+        cache_valid_time: 0
         default_release: "{{ ansible_distribution_release }}-backports"
       when: firefox_backports in firefox_apt_cache_policy.stdout
 
@@ -31,6 +33,8 @@
         pkg:
           - firejail
           - firejail-profiles
+        update_cache: true
+        cache_valid_time: 30
       when: firefox_backports not in firefox_apt_cache_policy.stdout
 
     - name: Enable U2F

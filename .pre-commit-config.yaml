@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Chris Croome
+# Copyright 2022-2024 Chris Croome
 #
 # This file is part of the Webarchitects Firefox Ansible role.
 #
@@ -41,4 +41,8 @@ repos:
     hooks:
       - id: pymarkdown
         name: Markdown Lint
+        args:
+          - scan
+          - README.md
+          - files/README.md
 ...
