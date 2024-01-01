@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # {{ ansible_managed }}
+# {# j2lint: disable=jinja-statements-indentation j2lint: disable=single-statement-per-line #}
 
-if [[ "${XDG_SESSION_TYPE}" == "wayland" ]]; then
+if [[ "${XDG_SESSION_TYPE}" == "wayland" ]]
+then
   export MOZ_ENABLE_WAYLAND=1
 fi
 
-{% if firefox_firejail | bool and firefox_nightly_apt_firejail | bool %}firejail {%endif%}/usr/bin/firefox-nightly
+{% if firefox_firejail | bool and firefox_nightly_apt_firejail | bool %}firejail {% endif %}/usr/bin/firefox-nightly
 
 # vim: set ft=bash:
