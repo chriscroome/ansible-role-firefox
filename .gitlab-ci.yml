@@ -35,17 +35,17 @@ stages:
   - trixie
   - jammy
 bookworm:
-  image: registry.git.coop/webarch/containers/images/bookworm:20231016
+  image: registry.git.coop/webarch/containers/images/bookworm:20231213
   stage: bookworm
   script:
     - molecule test --all
 trixie:
-  image: registry.git.coop/webarch/containers/images/trixie:20231016
+  image: registry.git.coop/webarch/containers/images/trixie:20231213
   stage: trixie
   script:
     - molecule test --all
 jammy:
-  image: registry.git.coop/webarch/containers/images/jammy:20231016
+  image: registry.git.coop/webarch/containers/images/jammy:20231213
   stage: jammy
   script:
     - molecule test --all
