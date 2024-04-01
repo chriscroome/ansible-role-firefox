@@ -33,44 +33,44 @@
     #     var: molecule_firefox_ver
 
     - name: Run firefox-beta --version
-      ansible.builtin.command: /usr/local/bin/firefox-beta --version
+      ansible.builtin.command: /usr/local/bin/firefox-beta --headless --version
       check_mode: false
       changed_when: false
       register: molecule_firefox_beta_version
 
     - name: Set a fact for the firefox-beta version
       ansible.builtin.set_fact:
-        molecule_firefox_beta_ver: "{{ molecule_firefox_beta_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+        molecule_firefox_beta_ver: "{{ molecule_firefox_beta_version.stdout_lines[1] | ansible.builtin.split(' ') | last }}"
 
     - name: Debug firefox-beta --version
       ansible.builtin.debug:
         var: molecule_firefox_beta_ver
 
     - name: Run firefox-devedition --version
-      ansible.builtin.command: /usr/local/bin/firefox-devedition --version
+      ansible.builtin.command: /usr/local/bin/firefox-devedition --headless --version
       check_mode: false
       changed_when: false
       register: molecule_firefox_devedition_version
 
     - name: Set a fact for the firefox-dev version
       ansible.builtin.set_fact:
-        molecule_firefox_devedition_ver: "{{ molecule_firefox_devedition_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+        molecule_firefox_devedition_ver: "{{ molecule_firefox_devedition_version.stdout_lines[1] | ansible.builtin.split(' ') | last }}"
 
-    - name: Debug firefox-dev --version
+    - name: Debug firefox-dev --headless --version
       ansible.builtin.debug:
         var: molecule_firefox_devedition_ver
 
-    - name: Run firefox-nightly --version
-      ansible.builtin.command: /usr/local/bin/firefox-nightly --version
+    - name: Run firefox-nightly --headless --version
+      ansible.builtin.command: /usr/local/bin/firefox-nightly --headless --version
       check_mode: false
       changed_when: false
       register: molecule_firefox_nightly_version
 
     - name: Set a fact for the firefox version
       ansible.builtin.set_fact:
-        molecule_firefox_nightly_ver: "{{ molecule_firefox_nightly_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+        molecule_firefox_nightly_ver: "{{ molecule_firefox_nightly_version.stdout_lines[1] | ansible.builtin.split(' ') | last }}"
 
-    - name: Debug firefox-nightly --version
+    - name: Debug firefox-nightly --headless --version
       ansible.builtin.debug:
         var: molecule_firefox_nightly_ver
 ...
