@@ -84,14 +84,14 @@
     - name: Firefox desktop file in place"
       ansible.builtin.template:
         src: firefox.desktop.j2
-        dest: "/usr/share/applications/{{ firefox_edition.app }}.desktop"
+        dest: "/usr/share/applications/{{ firefox_edition.pkg }}.desktop"
         mode: "0644"
         owner: root
         group: root
       loop: "{{ firefox_editions }}"
       loop_control:
         loop_var: firefox_edition
-        label: "{{ firefox_edition.app }}"
+        label: "{{ firefox_edition.pkg }}"
 
   tags:
     - firefox
