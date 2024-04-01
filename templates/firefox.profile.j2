@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 # Firejail profile for firefox-latest
 # Persistent local customizations
-include firefox-latest.local
+include {{ firefox_edition.pkg }}.local
 # Persistent global definitions
 # added by included profile
 #include globals.local

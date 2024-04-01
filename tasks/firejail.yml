@@ -45,25 +45,53 @@
         regex: '^[#]?[ ]?browser-disable-u2f'
         state: present
 
-    - name: Firefox firejail latest profile in place
+    - name: Firefox firejail profiles in place
       ansible.builtin.template:
-        src: firefox-latest.profile.j2
-        dest: /etc/firejail/firefox-latest.profile
-        owner: root
-        group: root
-        mode: "0644"
-
-    - name: Firefox firejail local profiles present
-      ansible.builtin.template:
-        src: firefox.local.j2
-        dest: "/etc/firejail/{{ edition.path }}.local"
+        src: firefox.profile.j2
+        dest: "/etc/firejail/{{ firefox_edition.pkg }}.profile"
         owner: root
         group: root
         mode: "0644"
       loop: "{{ firefox_editions }}"
       loop_control:
-        loop_var: edition
-        label: "{{ edition.script }}"
+        loop_var: firefox_edition
+        label: "{{ firefox_edition.pkg }}"
+
+    - name: Firefox firejail local profiles present
+      ansible.builtin.template:
+        src: firefox.local.j2
+        dest: "/etc/firejail/{{ firefox_edition.pkg }}.local"
+        owner: root
+        group: root
+        mode: "0644"
+      loop: "{{ firefox_editions }}"
+      loop_control:
+        loop_var: firefox_edition
+        label: "{{ firefox_edition.pkg }}"
+
+    - name: Firefox script in place
+      ansible.builtin.template:
+        src: firefox.sh.j2
+        dest: "usr/local/bin/{{ firefox_edition.pkg }}"
+        mode: "0755"
+        owner: root
+        group: root
+      loop: "{{ firefox_editions }}"
+      loop_control:
+        loop_var: firefox_edition
+        label: "{{ firefox_edition.pkg }}"
+
+    - name: Firefox desktop file in place"
+      ansible.builtin.template:
+        src: firefox.desktop.j2
+        dest: "/usr/share/applications/{{ firefox_edition.app }}.desktop"
+        mode: "0644"
+        owner: root
+        group: root
+      loop: "{{ firefox_editions }}"
+      loop_control:
+        loop_var: firefox_edition
+        label: "{{ firefox_edition.app }}"
 
   tags:
     - firefox

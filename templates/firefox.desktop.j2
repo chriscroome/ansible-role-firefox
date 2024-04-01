@@ -2,28 +2,28 @@
 
 [Desktop Entry]
 Version=1.0
-Exec={{ firefox_bin }}/{{ edition.script }} %u
+Exec=/usr/local/bin/{{ firefox_edition.pkg }} %u
 Terminal=false
 X-MultipleArgs=false
 Type=Application
-Icon={{ firefox_path }}/{{ edition.path }}/browser/chrome/icons/default/default128.png
-StartupWMClass={{ edition.product }}
+Icon=/usr/lib/{{ firefox_edition.app }}/browser/chrome/icons/default/default128.png
+StartupWMClass={{ firefox_edition.app }}
 Categories=GNOME;GTK;Network;WebBrowser;
 MimeType=application/json;application/pdf;application/rdf+xml;application/rss+xml;application/x-xpinstall;application/xhtml+xml;application/xml;audio/flac;audio/ogg;audio/webm;image/avif;image/gif;image/jpeg;image/png;image/svg+xml;image/webp;text/html;text/xml;video/ogg;video/webm;x-scheme-handler/chrome;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/mailto;
 StartupNotify=true
 Actions=new-window;new-private-window;open-profile-manager;
-Name={{ edition.name }}
+Name={{ firefox_edition.name }}
 Comment=Browse the World Wide Web
 GenericName=Web Browser
 Keywords=Internet;WWW;Browser;Web;Explorer;
-X-GNOME-FullName={{ edition.name }} Web Browser
+X-GNOME-FullName={{ firefox_edition.name }} Web Browser
 
 [Desktop Action new-window]
-Exec={{ firefox_bin }}/{{ edition.script }} --new-window %u
+Exec=/usr/local/bin/{{ firefox_edition.pkg }} --new-window %u
 Name=New Window
 
 [Desktop Action new-private-window]
-Exec={{ firefox_bin }}/{{ edition.script }} --private-window %u
+Exec=/usr/local/bin/{{ firefox_edition.pkg }} --private-window %u
 Name=New Private Window
 
 # vim: set ft=desktop:

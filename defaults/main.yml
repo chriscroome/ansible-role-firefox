@@ -9,47 +9,22 @@
 # You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
 ---
 firefox: false
-firefox_bin: /usr/local/bin
-firefox_download: /tmp
-# The name and channel (select name) are taken from the selection list at
-# https://www.mozilla.org/en-GB/firefox/all/ the product is taken from the
-# download URL and the version is taken from
-# https://product-details.mozilla.org/1.0/firefox_versions.json
-# path is taken from the name used by firejail
 firefox_editions:
-  - name: Firefox
-    channel: desktop_release
-    path: firefox-latest
-    product: firefox-latest
-    script: firefox
-    version: LATEST_FIREFOX_VERSION
-    jail: "{{ firefox_firejail }}"
-  - name: Firefox Beta
-    channel: desktop_beta
-    path: firefox-beta
-    product: firefox-beta-latest
-    script: firefox-beta
-    version: LATEST_FIREFOX_DEVEL_VERSION
-    jail: "{{ firefox_firejail }}"
-  - name: Firefox Developer Edition
-    channel: desktop_developer
-    path: firefox-developer-edition
-    product: firefox-devedition-latest
-    script: firefox-dev
-    version: FIREFOX_DEVEDITION
-    jail: "{{ firefox_firejail }}"
-  # Firefox Nightly apt package is used when firefox_nightly_apt is true
-  # - name: Firefox Nightly
-  #   channel: desktop_nightly
-  #   path: firefox-nightly
-  #   product: firefox-nightly-latest
-  #   script: firefox-nightly
-  #   version: FIREFOX_NIGHTLY
-  #   jail: "{{ firefox_firejail }}"
+ - name: Firefox Beta
+   app: firefox-beta-latest
+   pkg: firefox-beta
+ - name: Firefox Developer Edition
+   app: firefox-devedition-latest
+   pkg: firefox-devedition
+# Installing firefox currently fails
+#  firefox-l10n-en-gb : Depends: firefox (= 124.0.1~build1) but it is not installable
+# - name: Firefox
+#   app: firefox-latest
+#   pkg: firefox
+ - name: Firefox Nightly
+   app: firefox-nightly-latest
+   pkg: firefox-nightly
 firefox_firejail: true
 firefox_lang: en-GB
-firefox_nightly_apt: true
-firefox_nightly_apt_firejail: "{{ firefox_firejail }}"
-firefox_path: /opt
 firefox_validate: true
 ...

@@ -22,18 +22,6 @@
       ansible.builtin.include_tasks: validate.yml
       when: firefox_validate | bool
 
-    - name: Check that Firefox Nightly is not to be installed via a binary and a .deb package at the same time
-      ansible.builtin.assert:
-        that:
-          - ( "FIREFOX_NIGHTLY" not in firefox_editions | community.general.json_query('[].version') )
-          - ( "Firefox Nightly" not in firefox_editions | community.general.json_query('[].name') )
-          - ( "desktop_nightly" not in firefox_editions | community.general.json_query('[].channel') )
-          - ( "firefox-nightly" not in firefox_editions | community.general.json_query('[].path') )
-          - ( "firefox-nightly" not in firefox_editions | community.general.json_query('[].script') )
-          - ( "firefox-nightly-latest" not in firefox_editions | community.general.json_query('[].product') )
-        quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
-      when: firefox_nightly_apt | bool
-
     - name: Include apt role local fact tasks if variables are not defined
       ansible.builtin.include_role:
         name: apt
@@ -57,24 +45,24 @@
         update_cache: true
         cache_valid_time: 0
 
-    - name: Include the Firefox Nightly apt repo tasks
+    - name: Include the Firefox apt repo tasks
       ansible.builtin.include_tasks: apt.yml
-      when: firefox_nightly_apt | bool
 
-    - name: Include the Firefox binary editions tasks
-      ansible.builtin.include_tasks: editions.yml
-      when:
-        - firefox_editions is defined
-        - firefox_editions | length > 0
+    - name: Firefox editions present
+      ansible.builtin.apt:
+        pkg: "{{ firefox_pkg }}"
+        install_recommends: true
+        state: present
+      vars:
+        firefox_pkg: "{{ firefox_edition.pkg }}{% if firefox_lang != 'en' %}-l10n-{{ firefox_lang | lower }}{% endif %}"
+      loop: "{{ firefox_editions }}"
+      loop_control:
+        loop_var: firefox_edition
+        label: "{{ firefox_edition.pkg }}"
 
     - name: Include firejail tasks
       ansible.builtin.include_tasks: firejail.yml
       when: firefox_firejail | bool
-
-    - name: Print the CHANGELOG
-      ansible.builtin.debug:
-        var: firefox_changelog
-      when: firefox_changelog != []
 
   when: firefox | bool
   tags:
