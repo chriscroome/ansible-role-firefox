@@ -18,59 +18,14 @@
     ansible_python_interpreter: /usr/bin/python3
   tasks:
 
-    # - name: Run firefox --version
-    #   ansible.builtin.command: /usr/local/bin/firefox --version
-    #   check_mode: false
-    #   changed_when: false
-    #   register: molecule_firefox_version
+    - name: Get the apt package facts
+      ansible.builtin.package_facts:
+        manager: apt
 
-    # - name: Set a fact for the firefox version
-    #   ansible.builtin.set_fact:
-    #     molecule_firefox_ver: "{{ molecule_firefox_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
-
-    # - name: Debug firefox --version
-    #   ansible.builtin.debug:
-    #     var: molecule_firefox_ver
-
-    - name: Run firefox-beta --version
-      ansible.builtin.command: /usr/local/bin/firefox-beta --headless --version
-      check_mode: false
-      changed_when: false
-      register: molecule_firefox_beta_version
-
-    - name: Set a fact for the firefox-beta version
-      ansible.builtin.set_fact:
-        molecule_firefox_beta_ver: "{{ molecule_firefox_beta_version.stdout_lines[1] | ansible.builtin.split(' ') | last }}"
-
-    - name: Debug firefox-beta --version
-      ansible.builtin.debug:
-        var: molecule_firefox_beta_ver
-
-    - name: Run firefox-devedition --version
-      ansible.builtin.command: /usr/local/bin/firefox-devedition --headless --version
-      check_mode: false
-      changed_when: false
-      register: molecule_firefox_devedition_version
-
-    - name: Set a fact for the firefox-dev version
-      ansible.builtin.set_fact:
-        molecule_firefox_devedition_ver: "{{ molecule_firefox_devedition_version.stdout_lines[1] | ansible.builtin.split(' ') | last }}"
-
-    - name: Debug firefox-dev --headless --version
-      ansible.builtin.debug:
-        var: molecule_firefox_devedition_ver
-
-    - name: Run firefox-nightly --headless --version
-      ansible.builtin.command: /usr/local/bin/firefox-nightly --headless --version
-      check_mode: false
-      changed_when: false
-      register: molecule_firefox_nightly_version
-
-    - name: Set a fact for the firefox version
-      ansible.builtin.set_fact:
-        molecule_firefox_nightly_ver: "{{ molecule_firefox_nightly_version.stdout_lines[1] | ansible.builtin.split(' ') | last }}"
-
-    - name: Debug firefox-nightly --headless --version
-      ansible.builtin.debug:
-        var: molecule_firefox_nightly_ver
+    - name: Check that Firefox packages are present
+      ansible.builtin.assert:
+        that:
+          - ( "firefox-beta" in ansible_facts.packages )
+          - ( "firefox-devedition" in ansible_facts.packages )
+          - ( "firefox-nightly" in ansible_facts.packages )
 ...
