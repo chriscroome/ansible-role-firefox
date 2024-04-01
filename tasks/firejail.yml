@@ -72,7 +72,7 @@
     - name: Firefox script in place
       ansible.builtin.template:
         src: firefox.sh.j2
-        dest: "usr/local/bin/{{ firefox_edition.pkg }}"
+        dest: "/usr/local/bin/{{ firefox_edition.pkg }}"
         mode: "0755"
         owner: root
         group: root
