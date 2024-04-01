@@ -81,7 +81,7 @@
         loop_var: firefox_edition
         label: "{{ firefox_edition.pkg }}"
 
-    - name: Firefox desktop file in place"
+    - name: Firefox desktop file in place
       ansible.builtin.template:
         src: firefox.desktop.j2
         dest: "/usr/share/applications/{{ firefox_edition.pkg }}.desktop"

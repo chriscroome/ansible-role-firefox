@@ -30,12 +30,6 @@
       ansible.builtin.debug:
         var: ansible_user_dir
 
-    - name: Firefox present
-      ansible.builtin.apt:
-        pkg: firefox-esr
-        update_cache: true
-      when: ansible_distribution == "Debian"
-
     - name: Include firefox role as root
       ansible.builtin.include_role:
         name: firefox
