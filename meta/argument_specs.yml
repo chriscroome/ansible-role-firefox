@@ -27,10 +27,6 @@ argument_specs:
         required: true
         description: A list of Firefox versions.
         options:
-          app:
-            type: str
-            required: true
-            description: The Firefox edition application name.
           name:
             type: str
             required: true

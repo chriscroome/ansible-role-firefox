@@ -11,18 +11,14 @@
 firefox: false
 firefox_editions:
  - name: Firefox Beta
-   app: firefox-beta-latest
    pkg: firefox-beta
  - name: Firefox Developer Edition
-   app: firefox-devedition-latest
    pkg: firefox-devedition
 # Installing firefox currently fails
 #  firefox-l10n-en-gb : Depends: firefox (= 124.0.1~build1) but it is not installable
 # - name: Firefox
-#   app: firefox-latest
 #   pkg: firefox
  - name: Firefox Nightly
-   app: firefox-nightly-latest
    pkg: firefox-nightly
 firefox_firejail: true
 firefox_lang: en-GB
