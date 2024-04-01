@@ -32,8 +32,9 @@
 
     - name: Firefox present
       ansible.builtin.apt:
-        pkg: "firefox{% if ansible_distribution == 'Debian' %}-esr{% endif %}"
+        pkg: firefox-esr
         update_cache: true
+      when: ansible_distribution == "Debian"
 
     - name: Include firefox role as root
       ansible.builtin.include_role:
