@@ -43,12 +43,13 @@
         ( ansible_local.gpg.version is not defined ) or
         ( ansible_local.bash.path is not defined )
 
-    - name: GNUPG and fonts present
+    - name: Required packages present
       ansible.builtin.apt:
         pkg:
           - fonts-lmodern
           - fonts-stix
           - gnupg
+          - python3-debian
           - xfonts-100dpi
           - xfonts-75dpi
           - xfonts-scalable

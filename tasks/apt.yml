@@ -94,13 +94,26 @@
       when: (not ansible_check_mode | bool)
 
     - name: Firefox Nightly repository sources file present
-      ansible.builtin.template:
-        src: firefox.sources.j2
-        dest: /etc/apt/sources.list.d/firefox.sources
-        mode: "0644"
-        owner: root
-        group: root
+      ansible.builtin.deb822_repository:
+        allow_downgrade_to_insecure: false
+        allow_insecure: false
+        allow_weak: false
+        architectures: "{{ ansible_facts.ansible_local.dpkg.arch }}"
+        check_date: true
+        check_valid_until: true
+        components: main
+        enabled: true
+        name: firefox-nightly
+        signed_by: /etc/apt/keyrings/firefox.gpg
+        suites: "{{ ansible_distribution_release }}"
+        types: deb
+        uris: https://packages.mozilla.org/apt
       register: firefox_sources
+
+    - name: Debug firefox_sources
+      ansible.builtin.debug:
+        msg: "{{ firefox_sources.repo | string | community.general.jc('ini') }}"
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Firefox Nightly apt preferences present
       ansible.builtin.template:
