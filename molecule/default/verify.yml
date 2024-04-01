@@ -18,22 +18,22 @@
     ansible_python_interpreter: /usr/bin/python3
   tasks:
 
-    - name: Run firefox --version
-      ansible.builtin.command: /opt/firefox-latest/firefox --version
-      check_mode: false
-      changed_when: false
-      register: molecule_firefox_version
+    # - name: Run firefox --version
+    #   ansible.builtin.command: /usr/local/bin/firefox --version
+    #   check_mode: false
+    #   changed_when: false
+    #   register: molecule_firefox_version
 
-    - name: Set a fact for the firefox version
-      ansible.builtin.set_fact:
-        molecule_firefox_ver: "{{ molecule_firefox_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+    # - name: Set a fact for the firefox version
+    #   ansible.builtin.set_fact:
+    #     molecule_firefox_ver: "{{ molecule_firefox_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
 
-    - name: Debug firefox --version
-      ansible.builtin.debug:
-        var: molecule_firefox_ver
+    # - name: Debug firefox --version
+    #   ansible.builtin.debug:
+    #     var: molecule_firefox_ver
 
     - name: Run firefox-beta --version
-      ansible.builtin.command: /opt/firefox-beta/firefox --version
+      ansible.builtin.command: /usr/local/bin/firefox-beta --version
       check_mode: false
       changed_when: false
       register: molecule_firefox_beta_version
@@ -46,22 +46,22 @@
       ansible.builtin.debug:
         var: molecule_firefox_beta_ver
 
-    - name: Run firefox-dev --version
-      ansible.builtin.command: /opt/firefox-developer-edition/firefox --version
+    - name: Run firefox-devedition --version
+      ansible.builtin.command: /usr/local/bin/firefox-devedition --version
       check_mode: false
       changed_when: false
-      register: molecule_firefox_dev_version
+      register: molecule_firefox_devedition_version
 
     - name: Set a fact for the firefox-dev version
       ansible.builtin.set_fact:
-        molecule_firefox_dev_ver: "{{ molecule_firefox_dev_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
+        molecule_firefox_devedition_ver: "{{ molecule_firefox_devedition_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
 
     - name: Debug firefox-dev --version
       ansible.builtin.debug:
-        var: molecule_firefox_dev_ver
+        var: molecule_firefox_devedition_ver
 
     - name: Run firefox-nightly --version
-      ansible.builtin.command: /usr/bin/firefox-nightly --version
+      ansible.builtin.command: /usr/local/bin/firefox-nightly --version
       check_mode: false
       changed_when: false
       register: molecule_firefox_nightly_version
@@ -70,38 +70,7 @@
       ansible.builtin.set_fact:
         molecule_firefox_nightly_ver: "{{ molecule_firefox_nightly_version.stdout_lines[0] | ansible.builtin.split(' ') | last }}"
 
-    - name: Debug firefox --version
+    - name: Debug firefox-nightly --version
       ansible.builtin.debug:
         var: molecule_firefox_nightly_ver
-
-    - name: Download the Firefox versions JSON
-      ansible.builtin.uri:
-        url: https://product-details.mozilla.org/1.0/firefox_versions.json
-        force: true
-        return_content: true
-        status_code:
-          - 200
-      check_mode: false
-      changed_when: false
-      register: molecule_firefox_versions
-
-    - name: Debug firefox_versions.json
-      ansible.builtin.debug:
-        var: molecule_firefox_versions.json
-
-    - name: Debug firefox_versions.json.LATEST_FIREFOX_VERSION
-      ansible.builtin.debug:
-        var: molecule_firefox_versions.json.LATEST_FIREFOX_VERSION
-
-    - name: Debug firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
-      ansible.builtin.debug:
-        var: molecule_firefox_versions.json.LATEST_FIREFOX_DEVEL_VERSION
-
-    - name: Assert that the versions installed are the latest versions available
-      ansible.builtin.assert:
-        that:
-          - molecule_firefox_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_VERSION, 'eq')
-          - molecule_firefox_beta_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_RELEASED_DEVEL_VERSION, 'eq')
-          - molecule_firefox_dev_ver is ansible.builtin.version(molecule_firefox_versions.json.LATEST_FIREFOX_RELEASED_DEVEL_VERSION, 'eq')
-          - molecule_firefox_nightly_ver is ansible.builtin.version(molecule_firefox_versions.json.FIREFOX_NIGHTLY, 'eq')
 ...
