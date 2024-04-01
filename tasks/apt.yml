@@ -105,7 +105,7 @@
         enabled: true
         name: firefox-nightly
         signed_by: /etc/apt/keyrings/firefox.gpg
-        suites: "{{ ansible_distribution_release }}"
+        suites: mozilla
         types: deb
         uris: https://packages.mozilla.org/apt
       register: firefox_sources
