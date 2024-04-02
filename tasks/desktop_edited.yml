@@ -8,7 +8,7 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
 ---
-- name: Firefox desktop file edited
+- name: "Firefox desktop file edited for {{ firefox_edition.pkg }}"
   community.general.ini_file:
     path: "/usr/share/applications/{{ firefox_edition.pkg }}.desktop"
     section: "{{ firefox_desktop_section.key }}"

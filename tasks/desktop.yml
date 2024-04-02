@@ -11,7 +11,7 @@
 - name: Firefox desktop file
   block:
 
-    - name: Facts for the Firefox desktop file
+    - name: "Facts set for the Firefox desktop file for {{ firefox_edition.pkg }}"
       ansible.builtin.set_fact:
         firefox_desktop:
           "Desktop Entry":
@@ -23,13 +23,13 @@
             Keywords: "Internet;WWW;Browser;Web;Explorer;"
             MimeType: "application/json;application/pdf;application/rdf+xml;application/rss+xml;application/x-xpinstall;application/xhtml+xml;application/xml;audio/flac;audio/ogg;audio/webm;image/avif;image/gif;image/jpeg;image/png;image/svg+xml;image/webp;text/html;text/xml;video/ogg;video/webm;x-scheme-handler/chrome;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/mailto;"
             Name: "{{ firefox_edition.name }}"
-            StartupNotify: true
+            StartupNotify: "true"
             StartupWMClass: "{{ firefox_edition.pkg }}"
-            Terminal: false
+            Terminal: "false"
             Type: Application
             Version: "1.0"
             X-GNOME-FullName: "{{ firefox_edition.name }} Web Browser"
-            X-MultipleArgs: false
+            X-MultipleArgs: "false"
           "Desktop Action new-window":
             Exec: "/usr/local/bin/{{ firefox_edition.pkg }} --new-window %u"
             Name: "New Window"
@@ -37,7 +37,7 @@
             Exec: "/usr/local/bin/{{ firefox_edition.pkg }} --private-window %u"
             Name: "New Private Window"
 
-    - name: Include firefox desktop file tasks
+    - name: "Include firefox desktop file tasks for {{ firefox_edition.pkg }}"
       ansible.builtin.include_tasks: desktop_edited.yml
       loop: "{{ firefox_desktop | dict2items }}"
       loop_control:

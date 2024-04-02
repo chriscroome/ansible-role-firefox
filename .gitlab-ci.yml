@@ -17,6 +17,7 @@ variables:
   DEBIAN_FRONTEND: "noninteractive"
   DEFAULT_MANAGED_STR: "Ansible managed"
   MOLECULE_VERBOSITY: "0"
+  PRE_COMMIT_COLOR: always
   PY_COLORS: "1"
 before_script:
   - whoami

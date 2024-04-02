@@ -59,6 +59,16 @@
     #     loop_var: firefox_edition
     #     label: "{{ firefox_edition.pkg }}"
 
+    - name: Firefix devedition profile present
+      ansible.builtin.copy:
+        src: /etc/firejail/firefox-developer-edition.profile
+        dest: /etc/firejail/firefox-devedition.profile
+        force: false
+        remote_src: true
+        owner: root
+        group: root
+        mode: "0644"
+
     - name: Firefox firejail local profiles present
       ansible.builtin.template:
         src: firefox.local.j2
