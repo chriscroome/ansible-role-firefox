@@ -10,6 +10,30 @@
 ---
 firefox_backports: "{{ ansible_distribution_release }}-backports"
 
+firefox_desktop:
+  "Desktop Entry":
+    Actions: "new-window;new-private-window;open-profile-manager;"
+    Categories: "GNOME;GTK;Network;WebBrowser;"
+    Comment: "Browse the World Wide Web"
+    Exec: "/usr/local/bin/{{ firefox_edition.pkg }} %u"
+    Icon: "/usr/lib/{{ firefox_edition.pkg }}/browser/chrome/icons/default/default128.png"
+    Keywords: "Internet;WWW;Browser;Web;Explorer;"
+    MimeType: "application/json;application/pdf;application/rdf+xml;application/rss+xml;application/x-xpinstall;application/xhtml+xml;application/xml;audio/flac;audio/ogg;audio/webm;image/avif;image/gif;image/jpeg;image/png;image/svg+xml;image/webp;text/html;text/xml;video/ogg;video/webm;x-scheme-handler/chrome;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/mailto;"
+    Name: "{{ firefox_edition.name }}"
+    StartupNotify: true
+    StartupWMClass: "{{ firefox_edition.pkg }}"
+    Terminal: false
+    Type: Application
+    Version: "1.0"
+    X-GNOME-FullName: "{{ firefox_edition.name }} Web Browser"
+    X-MultipleArgs: false
+  "Desktop Action new-window":
+    Exec: "/usr/local/bin/{{ firefox_edition.pkg }} --new-window %u"
+    Name: "New Window"
+  "Desktop Action new-private-window":
+    Exec: "/usr/local/bin/{{ firefox_edition.pkg }} --private-window %u"
+    Name: "New Private Window"
+
 # https://docs.ansible.com/ansible/latest/playbook_guide/complex_data_manipulation.html
 firefoxvarnames: "{{ q('varnames', '^firefox_') | sort }}"
 firefoxhostvars: "{{ dict(firefoxvarnames | list | zip(q('vars', *firefoxvarnames))) }}"

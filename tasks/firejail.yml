@@ -83,14 +83,8 @@
         loop_var: firefox_edition
         label: "{{ firefox_edition.pkg }}"
 
-    # This would be better using the ini_file module to edit the existing files
-    - name: Firefox desktop file in place
-      ansible.builtin.template:
-        src: firefox.desktop.j2
-        dest: "/usr/share/applications/{{ firefox_edition.pkg }}.desktop"
-        mode: "0644"
-        owner: root
-        group: root
+    - name: Include Firefox desktop file tasks
+      ansible.builtin.include_tasks: desktop.yml
       loop: "{{ firefox_editions }}"
       loop_control:
         loop_var: firefox_edition
