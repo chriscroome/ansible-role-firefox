@@ -43,4 +43,11 @@
         name: firefox
       vars:  # noqa var-naming[no-role-prefix]
         firefox: true
+        firefox_editions:
+          - name: Firefox Beta
+            pkg: firefox-beta
+          - name: Firefox Developer Edition
+            pkg: firefox-devedition
+          - name: Firefox Nightly
+            pkg: firefox-nightly
 ...
