@@ -45,19 +45,19 @@
         regex: '^[#]?[ ]?browser-disable-u2f'
         state: present
 
-    - name: Firefox firejail profiles in place
-      ansible.builtin.template:
-        src: firefox.profile.j2
-        dest: "/etc/firejail/{{ firefox_edition.pkg }}.profile"
-        owner: root
-        group: root
-        mode: "0644"
-      # Don't clobber the firefox profile
-      when: firefox_edition.pkg != "firefox"
-      loop: "{{ firefox_editions }}"
-      loop_control:
-        loop_var: firefox_edition
-        label: "{{ firefox_edition.pkg }}"
+    # - name: Firefox firejail profiles in place
+    #   ansible.builtin.template:
+    #     src: firefox.profile.j2
+    #     dest: "/etc/firejail/{{ firefox_edition.pkg }}.profile"
+    #     owner: root
+    #     group: root
+    #     mode: "0644"
+    #   # Don't clobber the firefox profile
+    #   when: firefox_edition.pkg != "firefox"
+    #   loop: "{{ firefox_editions }}"
+    #   loop_control:
+    #     loop_var: firefox_edition
+    #     label: "{{ firefox_edition.pkg }}"
 
     - name: Firefox firejail local profiles present
       ansible.builtin.template:
@@ -83,6 +83,7 @@
         loop_var: firefox_edition
         label: "{{ firefox_edition.pkg }}"
 
+    # This would be better using the ini_file module to edit the existing files
     - name: Firefox desktop file in place
       ansible.builtin.template:
         src: firefox.desktop.j2
