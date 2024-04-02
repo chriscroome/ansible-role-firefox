@@ -10,7 +10,7 @@
 ---
 - name: Firefox desktop file edited
   community.general.ini_file:
-    path: "/usr/local/bin/{{ firefox_edition.pkg }}"
+    path: "/usr/share/applications/{{ firefox_edition.pkg }}.desktop"
     section: "{{ firefox_desktop_section.key }}"
     option: "{{ firefox_desktop_variable_pair.key }}"
     value: "{{ firefox_desktop_variable_pair.value }}"
