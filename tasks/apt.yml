@@ -93,6 +93,35 @@
 
       when: (not ansible_check_mode | bool)
 
+    - name: Stat Firefox repository sources file
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/firefox.sources
+      register: firefox_sources_path
+
+    - name: Read the Firefox repository sources file
+      block:
+
+        - name: Slurp /etc/apt/sources.list.d/firefox.sources
+          ansible.builtin.slurp:
+            src: /etc/apt/sources.list.d/firefox.sources
+          register: firefox_sources_contents_b64encoded
+
+        - name: Decode the base64 encoded version of /etc/apt/sources.list.d/firefox.sources
+          ansible.builtin.set_fact:
+            firefox_sources_contents: "{{ firefox_sources_contents_b64encoded['content'] | ansible.builtin.b64decode | string | community.general.jc('ini') }}"
+
+        - name: Print the contents of /etc/apt/sources.list.d/firefox.sources
+          ansible.builtin.debug:
+            var: firefox_sources_contents
+            verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}1{% else %}2{% endif %}"
+
+        - name: Set a fact for the prior Firefox repository sources file contents
+          ansible.builtin.set_fact:
+            firefox_sources_contents_prior: "{{ firefox_sources_contents }}"
+          when: firefox_sources_contents is defined
+
+      when: firefox_sources_path.stat.exists | bool
+
     - name: Firefox repository sources file present
       ansible.builtin.deb822_repository:
         allow_downgrade_to_insecure: false
@@ -113,7 +142,16 @@
     - name: Debug firefox_sources
       ansible.builtin.debug:
         msg: "{{ firefox_sources.repo | string | community.general.jc('ini') }}"
-        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}1{% else %}2{% endif %}"
+
+    - name: Diff Firefox repository sources file update
+      ansible.utils.fact_diff:
+        before: "{{ firefox_sources_contents_prior }}"
+        after: "{{ firefox_sources.repo | string | community.general.jc('ini') }}"
+      when:
+        - ( ansible_check_mode | bool ) or ( ansible_diff_mode | bool )
+        - firefox_sources_contents_prior is defined
+        - firefox_sources.repo is defined
 
     - name: Firefox apt preferences present
       ansible.builtin.template:
