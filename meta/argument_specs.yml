@@ -24,8 +24,8 @@ argument_specs:
         description: Debian version backports string.
       firefox_desktop:
         type: dict
-        required: true
-        description: Dictionary of configuration for the Firefox Desktop file for Firejail.
+        required: false
+        description: Internal dictionary of configuration for the Firefox Desktop file for Firejail.
       firefox_editions:
         type: list
         required: true
