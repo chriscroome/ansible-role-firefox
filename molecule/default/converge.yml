@@ -30,6 +30,14 @@
       ansible.builtin.debug:
         var: ansible_user_dir
 
+    - name: Uninstall snapd
+      ansible.builtin.apt:
+        pkg: snapd
+        state: absent
+        autoclean: true
+        autoremove: true
+      when: ansible_distribution == "Ubuntu"
+
     - name: Include firefox role as root
       ansible.builtin.include_role:
         name: firefox

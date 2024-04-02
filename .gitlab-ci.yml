@@ -32,10 +32,10 @@ before_script:
   - apt update
   - apt -yq install libdbus-glib-1-2
 stages:
-  - bookworm
-  - trixie
   - jammy
   - noble
+  - bookworm
+  - trixie
 bookworm:
   image: registry.git.coop/webarch/containers/images/bookworm:20240326
   stage: bookworm
