@@ -1,8 +1,10 @@
 # {{ ansible_managed }}
 #
-# Firejail profile for firefox
+# Firejail profile for {{ firefox_edition.name }}
+
 # Description: Safe and easy web browser from Mozilla
 # This file is overwritten after every install/update
+
 # Persistent local customizations
 include {{ firefox_edition.pkg }}.local
 # Persistent global definitions
