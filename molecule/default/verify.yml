@@ -28,4 +28,5 @@
           - ( "firefox-beta" in ansible_facts.packages )
           - ( "firefox-devedition" in ansible_facts.packages )
           - ( "firefox-nightly" in ansible_facts.packages )
+        quiet: true
 ...
