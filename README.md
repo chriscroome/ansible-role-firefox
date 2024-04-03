@@ -2,7 +2,7 @@
 
 [![pipeline status](https://git.coop/webarch/firefox/badges/main/pipeline.svg)](https://git.coop/webarch/firefox/-/commits/main)
 
-This is an Ansible role for configuring the Mozilla apt repo and installing all the Firefox editions.
+This is an Ansible role for configuring the Mozilla apt repo and installing different Firefox editions.
 
 ## Usage
 
@@ -23,14 +23,10 @@ A list of Firefox editions to install, for example:
 ```yaml
 firefox_editions:
  - name: Firefox Developer Edition
-   app: firefox-devedition-latest
    pkg: firefox-devedition
  - name: Firefox Nightly
-   app: firefox-nightly-latest
    pkg: firefox-nightly
 ```
-
-By default the Firefox ESR version is not installed since this is provided by Debian.
 
 ### firefox_firejail
 
@@ -46,7 +42,7 @@ Validate all variables that start with `firefox_` using the argument specificati
 
 ## Firejail
 
-By default this role configures the Firejail for all the versions that are installed to be run via [Firejail](https://github.com/netblue30/firejail), which is installed from [Debian backports](https://backports.debian.org/) if available.
+By default this role installs and configures [Firejail](https://github.com/netblue30/firejail), from [Debian backports](https://backports.debian.org/) if available from there.
 
 In order for WebAuthn to work (for example using a Yubikey) this role edits `/etc/firejail/firejail.config` to set:
 
