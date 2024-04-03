@@ -5,6 +5,6 @@ if [[ "${XDG_SESSION_TYPE}" == "wayland" ]]; then
   export MOZ_ENABLE_WAYLAND=1
 fi
 
-firejail /usr/bin/{{ firefox_edition.pkg }}
+firejail /usr/lib/{{ firefox_edition.pkg }}/firefox
 
 # vim: set ft=bash:

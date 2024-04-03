@@ -1,2 +1,6 @@
 # {{ ansible_managed }}
-whitelist /usr/bin/{{ firefox_edition.pkg }}
+
+# Add the next line to your firefox.local to allow screen sharing under wayland.
+dbus-user.talk org.freedesktop.portal.Desktop
+
+whitelist /usr/lib/{{ firefox_edition.pkg }}
