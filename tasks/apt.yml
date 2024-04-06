@@ -133,6 +133,7 @@
         components: main
         enabled: true
         name: firefox
+        pdiffs: true
         signed_by: /etc/apt/keyrings/firefox.gpg
         suites: mozilla
         types: deb
