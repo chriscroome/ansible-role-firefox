@@ -20,7 +20,7 @@ firefox_gpg_url: https://packages.mozilla.org/apt/repo-signing-key.gpg
 
 # Get the sha256 checksum using the following command
 # wget -q 'https://packages.mozilla.org/apt/repo-signing-key.gpg' -O - | sha256sum - | awk '{ print $1 }' | sed 's/^/"sha256:/' | sed 's/$/"/'
-firefox_gpg_checksum: "sha256:3ce6a27fe0538464191eebb9ff1a0b8a269af16d872524822b25198328263e84"
+firefox_gpg_checksum: "sha256:3ecc63922b7795eb23fdc449ff9396f9114cb3cf186d6f5b53ad4cc3ebfbb11f"
 firefox_gpg_checksum_raw: "{{ firefox_gpg_checksum | regex_replace('^sha256:') }}"
 
 # Get the GPG fingerprints using the following command
@@ -117,6 +117,7 @@ firefox_pkg:
   - firefox-beta-l10n-sco
   - firefox-beta-l10n-si
   - firefox-beta-l10n-sk
+  - firefox-beta-l10n-skr
   - firefox-beta-l10n-sl
   - firefox-beta-l10n-son
   - firefox-beta-l10n-sq
@@ -219,6 +220,7 @@ firefox_pkg:
   - firefox-devedition-l10n-sco
   - firefox-devedition-l10n-si
   - firefox-devedition-l10n-sk
+  - firefox-devedition-l10n-skr
   - firefox-devedition-l10n-sl
   - firefox-devedition-l10n-son
   - firefox-devedition-l10n-sq
@@ -239,6 +241,109 @@ firefox_pkg:
   - firefox-devedition-l10n-xh
   - firefox-devedition-l10n-zh-cn
   - firefox-devedition-l10n-zh-tw
+  - firefox-esr
+  - firefox-esr-l10n-ach
+  - firefox-esr-l10n-af
+  - firefox-esr-l10n-an
+  - firefox-esr-l10n-ar
+  - firefox-esr-l10n-ast
+  - firefox-esr-l10n-az
+  - firefox-esr-l10n-be
+  - firefox-esr-l10n-bg
+  - firefox-esr-l10n-bn
+  - firefox-esr-l10n-br
+  - firefox-esr-l10n-bs
+  - firefox-esr-l10n-ca
+  - firefox-esr-l10n-cak
+  - firefox-esr-l10n-ca-valencia
+  - firefox-esr-l10n-cs
+  - firefox-esr-l10n-cy
+  - firefox-esr-l10n-da
+  - firefox-esr-l10n-de
+  - firefox-esr-l10n-dsb
+  - firefox-esr-l10n-el
+  - firefox-esr-l10n-en-ca
+  - firefox-esr-l10n-en-gb
+  - firefox-esr-l10n-eo
+  - firefox-esr-l10n-es-ar
+  - firefox-esr-l10n-es-cl
+  - firefox-esr-l10n-es-es
+  - firefox-esr-l10n-es-mx
+  - firefox-esr-l10n-et
+  - firefox-esr-l10n-eu
+  - firefox-esr-l10n-fa
+  - firefox-esr-l10n-ff
+  - firefox-esr-l10n-fi
+  - firefox-esr-l10n-fr
+  - firefox-esr-l10n-fur
+  - firefox-esr-l10n-fy-nl
+  - firefox-esr-l10n-ga-ie
+  - firefox-esr-l10n-gd
+  - firefox-esr-l10n-gl
+  - firefox-esr-l10n-gn
+  - firefox-esr-l10n-gu-in
+  - firefox-esr-l10n-he
+  - firefox-esr-l10n-hi-in
+  - firefox-esr-l10n-hr
+  - firefox-esr-l10n-hsb
+  - firefox-esr-l10n-hu
+  - firefox-esr-l10n-hy-am
+  - firefox-esr-l10n-ia
+  - firefox-esr-l10n-id
+  - firefox-esr-l10n-is
+  - firefox-esr-l10n-it
+  - firefox-esr-l10n-ja
+  - firefox-esr-l10n-ka
+  - firefox-esr-l10n-kab
+  - firefox-esr-l10n-kk
+  - firefox-esr-l10n-km
+  - firefox-esr-l10n-kn
+  - firefox-esr-l10n-ko
+  - firefox-esr-l10n-lij
+  - firefox-esr-l10n-lt
+  - firefox-esr-l10n-lv
+  - firefox-esr-l10n-mk
+  - firefox-esr-l10n-mr
+  - firefox-esr-l10n-ms
+  - firefox-esr-l10n-my
+  - firefox-esr-l10n-nb-no
+  - firefox-esr-l10n-ne-np
+  - firefox-esr-l10n-nl
+  - firefox-esr-l10n-nn-no
+  - firefox-esr-l10n-oc
+  - firefox-esr-l10n-pa-in
+  - firefox-esr-l10n-pl
+  - firefox-esr-l10n-pt-br
+  - firefox-esr-l10n-pt-pt
+  - firefox-esr-l10n-rm
+  - firefox-esr-l10n-ro
+  - firefox-esr-l10n-ru
+  - firefox-esr-l10n-sat
+  - firefox-esr-l10n-sc
+  - firefox-esr-l10n-sco
+  - firefox-esr-l10n-si
+  - firefox-esr-l10n-sk
+  - firefox-esr-l10n-skr
+  - firefox-esr-l10n-sl
+  - firefox-esr-l10n-son
+  - firefox-esr-l10n-sq
+  - firefox-esr-l10n-sr
+  - firefox-esr-l10n-sv-se
+  - firefox-esr-l10n-szl
+  - firefox-esr-l10n-ta
+  - firefox-esr-l10n-te
+  - firefox-esr-l10n-tg
+  - firefox-esr-l10n-th
+  - firefox-esr-l10n-tl
+  - firefox-esr-l10n-tr
+  - firefox-esr-l10n-trs
+  - firefox-esr-l10n-uk
+  - firefox-esr-l10n-ur
+  - firefox-esr-l10n-uz
+  - firefox-esr-l10n-vi
+  - firefox-esr-l10n-xh
+  - firefox-esr-l10n-zh-cn
+  - firefox-esr-l10n-zh-tw
   - firefox-l10n-ach
   - firefox-l10n-af
   - firefox-l10n-an
@@ -320,6 +425,7 @@ firefox_pkg:
   - firefox-l10n-sco
   - firefox-l10n-si
   - firefox-l10n-sk
+  - firefox-l10n-skr
   - firefox-l10n-sl
   - firefox-l10n-son
   - firefox-l10n-sq
