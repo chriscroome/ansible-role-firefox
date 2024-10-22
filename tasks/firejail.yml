@@ -25,7 +25,7 @@
         state: latest
         update_cache: true
         cache_valid_time: 0
-        default_release: "{{ ansible_distribution_release }}-backports"
+        default_release: "{{ ansible_facts.distribution_release }}-backports"
       when: firefox_backports in firefox_apt_cache_policy.stdout
 
     - name: Packages present

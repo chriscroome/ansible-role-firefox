@@ -50,7 +50,7 @@
             gpg --dearmor < /root/firefox.asc > /etc/apt/keyrings/firefox.gpg
             chmod 644 /etc/apt/keyrings/firefox.gpg
           args:
-            executable: "{{ ansible_local.bash.path }}"
+            executable: "{{ ansible_facts.ansible_local.bash.path }}"
           changed_when: false
 
         - name: Stat Firefox gpg dearmored file
@@ -61,7 +61,7 @@
         - name: Firefox gpg key check command
           ansible.builtin.command: >
             gpg --with-colons
-            {% if ansible_local.gpg.version is version('2.2.12', '<') %}
+            {% if ansible_facts.ansible_local.gpg.version is version('2.2.12', '<') %}
             --with-fingerprint --with-subkey-fingerprint
             {% else %}
             --show-keys
@@ -81,7 +81,7 @@
             that:
               - firefox_gpg_fingerprints_found[0] == firefox_gpg_fingerprints[0]
             quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
-          when: ansible_local.gpg.version is version('2.2.12', '<')
+          when: ansible_facts.ansible_local.gpg.version is version('2.2.12', '<')
 
         - name: Firefox gpg key check all fingerprints
           ansible.builtin.assert:
@@ -89,7 +89,7 @@
               - firefox_gpg_fingerprints_found | difference(firefox_gpg_fingerprints) | length == 0
               - firefox_gpg_fingerprints | difference(firefox_gpg_fingerprints_found) | length == 0
             quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
-          when: ansible_local.gpg.version is version('2.2.12', '>=')
+          when: ansible_facts.ansible_local.gpg.version is version('2.2.12', '>=')
 
       when: (not ansible_check_mode | bool)
 

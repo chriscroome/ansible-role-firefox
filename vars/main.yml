@@ -8,7 +8,7 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects Firefox Ansible role. If not, see <https://www.gnu.org/licenses/>.
 ---
-firefox_backports: "{{ ansible_distribution_release }}-backports"
+firefox_backports: "{{ ansible_facts.distribution_release }}-backports"
 
 # https://docs.ansible.com/ansible/latest/playbook_guide/complex_data_manipulation.html
 firefoxvarnames: "{{ q('varnames', '^firefox_') | sort }}"
