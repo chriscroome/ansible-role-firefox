@@ -250,7 +250,7 @@ argument_specs:
             required: true
             description: "Enable this option if you have a version of Xpra that supports --attach switch for start command, default disabled."
           xpra_extra_params:
-            elements: str
+            type: str
             required: true
             description: "Xpra server command extra parameters. None by default; this is an example. --dpi 96"
           xvfb_screen:
@@ -470,7 +470,7 @@ argument_specs:
             required: false
             description: "Enable this option if you have a version of Xpra that supports --attach switch for start command, default disabled."
           xpra_extra_params:
-            elements: str
+            type: str
             required: false
             description: "Xpra server command extra parameters. None by default; this is an example. --dpi 96"
           xvfb_screen:
