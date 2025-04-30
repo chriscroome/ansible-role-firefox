@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Chris Croome
+# Copyright 2022-2025 Chris Croome
 #
 # This file is part of the Webarchitects Firefox Ansible role.
 #
@@ -19,6 +19,10 @@ firefox_editions:
   - name: Firefox Nightly
     pkg: firefox-nightly
 firefox_firejail: true
+firefox_firejail_config:
+  force_nonewprivs: true
+firefox_firejail_users:
+  - "{{ lookup('env', 'USER') }}"
 firefox_lang: en-GB
 firefox_validate: true
 ...

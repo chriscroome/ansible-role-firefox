@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Chris Croome
+# Copyright 2022-2025 Chris Croome
 #
 # This file is part of the Webarchitects Firefox Ansible role.
 #
@@ -14,6 +14,56 @@ firefox_backports: "{{ ansible_facts.distribution_release }}-backports"
 firefoxvarnames: "{{ q('varnames', '^firefox_') | sort }}"
 firefoxhostvars: "{{ dict(firefoxvarnames | list | zip(q('vars', *firefoxvarnames))) }}"
 
+# JMESPath query for Firefox Nightly GPG fingerprints
+firefox_gpg_fingerprints_query: "[?type=='fpr'].user_id"
+
+# The default Firejail config for /etc/firejail/firejail.config
+firefox_firejail_default_config:
+  allow_tray: false
+  apparmor: true
+  arp_probes: 2
+  bind: true
+  browser_allow_drm: false
+  browser_disable_u2f: false
+  chroot: false
+  dbus: true
+  disable_mnt: false
+  file_transfer: true
+  firejail_prompt: false
+  force_nonewprivs: false
+  join: true
+  join_timeout: 5
+  tracelog: false
+  name_change: true
+  netfilter-default: ""  # empty string causes the variable to be omitted
+  network: true
+  overlayfs: true
+  etc_hide_blacklisted: false
+  file_copy_limit: 500
+  private_bin: true
+  private_bin_no_local: false
+  private_etc: true
+  private_home: true
+  private_lib: false
+  private_opt: true
+  private_srv: true
+  quiet_by_default: false
+  restricted_network: true
+  seccomp: two
+  seccomp_filter_add: ""  # empty string causes the variable to be omitted
+  seccomp_error_action: EPERM
+  seccomp_log: false
+  userns: true
+  whitelist_disable_topdir: ""  # empty string causes the variable to be omitted
+  x11: true
+  xephyr_extra_params: []  # empty list causes the variable to be omitted
+  xephyr_screen: []  # empty list causes the variable to be omitted
+  xephyr_window_title: true
+  xpra_attach: false
+  xpra_extra_params: ""  # empty string causes the variable to be omitted
+  xvfb_screen: []  # empty list causes the variable to be omitted
+  xvfb_extra_params: ""  # empty string causes the variable to be omitted
+
 # ASCII armored GPG public key URL linked from
 # https://blog.nightly.mozilla.org/2023/10/30/introducing-mozillas-firefox-nightly-deb-packages-for-debian-based-linux-distributions/
 firefox_gpg_url: https://packages.mozilla.org/apt/repo-signing-key.gpg
@@ -27,9 +77,6 @@ firefox_gpg_checksum_raw: "{{ firefox_gpg_checksum | regex_replace('^sha256:') }
 # wget -q 'https://packages.mozilla.org/apt/repo-signing-key.gpg' -O - | gpg --dearmor | gpg --with-colons --show-keys - | grep ^fpr | sed 's/^fpr//' | sed 's/://g' | sed 's/^/  - /'
 firefox_gpg_fingerprints:
   - 35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3
-
-# JMESPath query for Firefox Nightly GPG fingerprints
-firefox_gpg_fingerprints_query: "[?type=='fpr'].user_id"
 
 # Get the packages available using the following command
 # grep Package /var/lib/apt/lists/*mozilla*_Packages | awk '{print $2}' | sort -u | sed 's/^/  - /'

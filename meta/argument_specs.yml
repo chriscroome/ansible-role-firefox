@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Chris Croome
+# Copyright 2022-2025 Chris Croome
 #
 # This file is part of the Webarchitects Firefox Ansible role.
 #
@@ -43,6 +43,451 @@ argument_specs:
         type: bool
         required: true
         description: Install firejail.
+      firefox_firejail_default_config:
+        type: dict
+        required: true
+        description: A dictionary of Firejail config for /etc/firejail/firejail.config.
+        options:
+          allow_tray:
+            type: bool
+            required: true
+            description: "Allow programs to display a tray icon (warning: allows escaping the sandbox; see https://github.com/netblue30/firejail/discussions/4053)"
+          apparmor:
+            type: bool
+            required: true
+            description: Enable AppArmor functionality, default enabled.
+          arp_probes:
+            type: int
+            required: true
+            description: "Number of ARP probes sent when assigning an IP address for --net option, default 2. This is a partial implementation of RFC 5227. A 0.5 seconds timeout is implemented for each probe. Increase this number to 4 if your local layer 2 network uses RSTP (IEEE 802.1w). Permitted values are between 1 and 30."
+            choices:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+              - 6
+              - 7
+              - 8
+              - 9
+              - 10
+              - 11
+              - 12
+              - 13
+              - 14
+              - 15
+              - 16
+              - 17
+              - 18
+              - 19
+              - 20
+              - 21
+              - 22
+              - 23
+              - 24
+              - 25
+              - 26
+              - 27
+              - 28
+              - 29
+              - 30
+          bind:
+            type: bool
+            required: true
+            description: Enable or disable bind support, default enabled.
+          browser_allow_drm:
+            type: bool
+            required: true
+            description: Allow (DRM) execution in browsers, default disabled.
+          browser_disable_u2f:
+            type: bool
+            required: true
+            description: Disable U2F in browsers, default enabled.
+          chroot:
+            type: bool
+            required: true
+            description: Enable or disable chroot support, default disabled.
+          dbus:
+            type: bool
+            required: true
+            description: Enable or disable dbus handling, default enabled.
+          disable_mnt:
+            type: bool
+            required: true
+            description: "Disable /mnt, /media, /run/mount and /run/media access. By default access to these directories is enabled. Unlike --disable-mnt profile option this cannot be overridden by --noblacklist or --ignore."
+          file_transfer:
+            type: bool
+            required: true
+            description: "Enable or disable file transfer support, default enabled."
+          firejail_prompt:
+            type: bool
+            required: true
+            description: "Enable Firejail green prompt in terminal, default disabled."
+          force_nonewprivs:
+            type: bool
+            required: true
+            description: "Force use of nonewprivs. This mitigates the possibility of a user abusing firejail's features to trick a privileged (suid or file capabilities) process into loading code or configuration that is partially under their control. Default disabled."
+          join:
+            type: bool
+            required: true
+            description: "Allow sandbox joining as a regular user, default enabled. root user can always join sandboxes."
+          join_timeout:
+            type: int
+            required: true
+            description: Timeout when joining a sandbox, default five seconds. It is not possible to join a sandbox while it is still starting up. Wait up to the specified period of time to allow sandbox setup to finish.
+          tracelog:
+            type: bool
+            required: true
+            description: Tracelog enables auditing blacklisted files and directories. A message is sent to syslog in case the file or the directory is accessed. Disabled by default.
+          name_change:
+            type: bool
+            required: true
+            description: Enable or disable sandbox name change, default enabled.
+          netfilter_default:
+            type: str
+            required: true
+            description: "Change default netfilter configuration. When using --netfilter option without a file argument, the default filter is hardcoded (see man 1 firejail). This configuration entry allows the user to change the default by specifying a file containing the filter configuration. The filter file format is the format of iptables-save and iptables-restore commands. For example /etc/iptables.iptables.rules"
+          network:
+            type: bool
+            required: true
+            description: Enable or disable networking features, default enabled.
+          overlayfs:
+            type: bool
+            required: true
+            description: "Enable or disable overlayfs features, default enabled."
+          etc_hide_blacklisted:
+            type: bool
+            required: true
+            description: "Hide blacklisted files in /etc directory (enabling this may break /etc/resolv.conf; see #5010), default disabled."
+          file_copy_limit:
+            type: int
+            required: true
+            description: "Set the limit for file copy in several --private-* options. The size is set in megabytes. By default we allow up to 500MB. Note: the files are copied in RAM."
+          private_bin:
+            type: bool
+            required: true
+            description: Enable or disable private-bin feature, default enabled.
+          private_bin_no_local:
+            type: bool
+            required: true
+            description: "Remove /usr/local directories from private-bin list, default disabled."
+          private_cache:
+            type: bool
+            required: true
+            description: "Enable or disable private-cache feature, default enabled."
+          private_etc:
+            type: bool
+            required: true
+            description: "Enable or disable private-etc feature, default enabled."
+          private_home:
+            type: bool
+            required: true
+            description: "Enable or disable private-home feature, default enabled."
+          private_lib:
+            type: bool
+            required: true
+            description: "Enable or disable private-lib feature, default disabled."
+          private_opt:
+            type: bool
+            required: true
+            description: "Enable or disable private-opt feature, default enabled."
+          private_srv:
+            type: bool
+            required: true
+            description: "Enable or disable private-srv feature, default enabled."
+          quiet_by_default:
+            type: bool
+            required: true
+            description: "Enable --quiet as default every time the sandbox is started. Default disabled."
+          restricted_network:
+            type: bool
+            required: true
+            description: "Enable or disable restricted network support, default disabled. If enabled, networking features should also be enabled (network yes). Restricted networking grants access to --interface, --net=ethXXX and --netfilter only to root user. Regular users are only allowed --net=none."
+          seccomp:
+            type: bool
+            required: true
+            description: "Enable or disable seccomp support, default enabled."
+          seccomp_filter_add:
+            type: str
+            required: true
+            description: "Add rules to the default seccomp filter. Same syntax as for --seccomp= None by default; this is an example !chroot,kcmp,mincore"
+          seccomp_error_action:
+            type: str
+            required: true
+            description: "Seccomp error action, kill, log or errno (EPERM, ENOSYS etc)."
+          seccomp_log:
+            type: bool
+            required: true
+            description: "If seccomp subsystem in Linux kernel kills a program, a message is posted to syslog. Starting with Linux kernel version 4.14, it is possible to send seccomp violation messages even if the program is allowed to continue (see 'seccomp-error-action EPERM' above). This logging feature is disabled by default in our implementation."
+          userns:
+            type: bool
+            required: true
+            description: "Enable or disable user namespace support, default enabled."
+          whitelist_disable_topdir:
+            type: str
+            required: true
+            description: "Disable whitelist top level directories, in addition to those that are disabled out of the box. None by default; this is an example /etc,/usr/etc"
+          x11:
+            type: bool
+            required: true
+            description: "Enable or disable X11 sandboxing support, default enabled."
+          xephyr_extra_params:
+            type: list
+            elements: str
+            required: true
+            description: "Xephyr command extra parameters. None by default; these are examples."
+          xephyr_screen:
+            type: list
+            elements: str
+            required: true
+            description: "Screen size for --x11=xephyr, default 800x600. Run /usr/bin/xrandr for a full list of resolutions available on your specific setup."
+          xephyr_window_title:
+            type: bool
+            required: true
+            description: "Firejail window title in Xephyr, default enabled."
+          xpra_attach:
+            type: bool
+            required: true
+            description: "Enable this option if you have a version of Xpra that supports --attach switch for start command, default disabled."
+          xpra_extra_params:
+            elements: str
+            required: true
+            description: "Xpra server command extra parameters. None by default; this is an example. --dpi 96"
+          xvfb_screen:
+            type: list
+            elements: str
+            required: true
+            description: "Screen size for --x11=xvfb, default 800x600x24. The third dimension is color depth; use 24 unless you know exactly what you're doing."
+          xvfb_extra_params:
+            type: list
+            elements: str
+            required: true
+            description: "Xvfb command extra parameters.  None by default; this is an example."
+      firefox_firejail_config:
+        type: dict
+        required: true
+        description: A dictionary of Firejail config for /etc/firejail/firejail.config.
+        options:
+          allow_tray:
+            type: bool
+            required: false
+            description: "Allow programs to display a tray icon (warning: allows escaping the sandbox; see https://github.com/netblue30/firejail/discussions/4053)"
+          apparmor:
+            type: bool
+            required: false
+            description: Enable AppArmor functionality, default enabled.
+          arp_probes:
+            type: int
+            required: false
+            description: "Number of ARP probes sent when assigning an IP address for --net option, default 2. This is a partial implementation of RFC 5227. A 0.5 seconds timeout is implemented for each probe. Increase this number to 4 if your local layer 2 network uses RSTP (IEEE 802.1w). Permitted values are between 1 and 30."
+            choices:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+              - 6
+              - 7
+              - 8
+              - 9
+              - 10
+              - 11
+              - 12
+              - 13
+              - 14
+              - 15
+              - 16
+              - 17
+              - 18
+              - 19
+              - 20
+              - 21
+              - 22
+              - 23
+              - 24
+              - 25
+              - 26
+              - 27
+              - 28
+              - 29
+              - 30
+          bind:
+            type: bool
+            required: false
+            description: Enable or disable bind support, default enabled.
+          browser_allow_drm:
+            type: bool
+            required: false
+            description: Allow (DRM) execution in browsers, default disabled.
+          browser_disable_u2f:
+            type: bool
+            required: false
+            description: Disable U2F in browsers, default enabled.
+          chroot:
+            type: bool
+            required: false
+            description: Enable or disable chroot support, default disabled.
+          dbus:
+            type: bool
+            required: false
+            description: Enable or disable dbus handling, default enabled.
+          disable_mnt:
+            type: bool
+            required: false
+            description: "Disable /mnt, /media, /run/mount and /run/media access. By default access to these directories is enabled. Unlike --disable-mnt profile option this cannot be overridden by --noblacklist or --ignore."
+          file_transfer:
+            type: bool
+            required: false
+            description: "Enable or disable file transfer support, default enabled."
+          firejail_prompt:
+            type: bool
+            required: false
+            description: "Enable Firejail green prompt in terminal, default disabled."
+          force_nonewprivs:
+            type: bool
+            required: false
+            description: "Force use of nonewprivs. This mitigates the possibility of a user abusing firejail's features to trick a privileged (suid or file capabilities) process into loading code or configuration that is partially under their control. Default disabled."
+          join:
+            type: bool
+            required: false
+            description: "Allow sandbox joining as a regular user, default enabled. root user can always join sandboxes."
+          join_timeout:
+            type: int
+            required: false
+            description: Timeout when joining a sandbox, default five seconds. It is not possible to join a sandbox while it is still starting up. Wait up to the specified period of time to allow sandbox setup to finish.
+          tracelog:
+            type: bool
+            required: false
+            description: Tracelog enables auditing blacklisted files and directories. A message is sent to syslog in case the file or the directory is accessed. Disabled by default.
+          name_change:
+            type: bool
+            required: false
+            description: Enable or disable sandbox name change, default enabled.
+          netfilter_default:
+            type: str
+            required: false
+            description: "Change default netfilter configuration. When using --netfilter option without a file argument, the default filter is hardcoded (see man 1 firejail). This configuration entry allows the user to change the default by specifying a file containing the filter configuration. The filter file format is the format of iptables-save and iptables-restore commands. For example /etc/iptables.iptables.rules"
+          network:
+            type: bool
+            required: false
+            description: Enable or disable networking features, default enabled.
+          overlayfs:
+            type: bool
+            required: false
+            description: "Enable or disable overlayfs features, default enabled."
+          etc_hide_blacklisted:
+            type: bool
+            required: false
+            description: "Hide blacklisted files in /etc directory (enabling this may break /etc/resolv.conf; see #5010), default disabled."
+          file_copy_limit:
+            type: int
+            required: false
+            description: "Set the limit for file copy in several --private-* options. The size is set in megabytes. By default we allow up to 500MB. Note: the files are copied in RAM."
+          private_bin:
+            type: bool
+            required: false
+            description: Enable or disable private-bin feature, default enabled.
+          private_bin_no_local:
+            type: bool
+            required: false
+            description: "Remove /usr/local directories from private-bin list, default disabled."
+          private_cache:
+            type: bool
+            required: false
+            description: "Enable or disable private-cache feature, default enabled."
+          private_etc:
+            type: bool
+            required: false
+            description: "Enable or disable private-etc feature, default enabled."
+          private_home:
+            type: bool
+            required: false
+            description: "Enable or disable private-home feature, default enabled."
+          private_lib:
+            type: bool
+            required: false
+            description: "Enable or disable private-lib feature, default disabled."
+          private_opt:
+            type: bool
+            required: false
+            description: "Enable or disable private-opt feature, default enabled."
+          private_srv:
+            type: bool
+            required: false
+            description: "Enable or disable private-srv feature, default enabled."
+          quiet_by_default:
+            type: bool
+            required: false
+            description: "Enable --quiet as default every time the sandbox is started. Default disabled."
+          restricted_network:
+            type: bool
+            required: false
+            description: "Enable or disable restricted network support, default disabled. If enabled, networking features should also be enabled (network yes). Restricted networking grants access to --interface, --net=ethXXX and --netfilter only to root user. Regular users are only allowed --net=none."
+          seccomp:
+            type: bool
+            required: false
+            description: "Enable or disable seccomp support, default enabled."
+          seccomp_filter_add:
+            type: str
+            required: false
+            description: "Add rules to the default seccomp filter. Same syntax as for --seccomp= None by default; this is an example !chroot,kcmp,mincore"
+          seccomp_error_action:
+            type: str
+            required: false
+            description: "Seccomp error action, kill, log or errno (EPERM, ENOSYS etc)."
+          seccomp_log:
+            type: bool
+            required: false
+            description: "If seccomp subsystem in Linux kernel kills a program, a message is posted to syslog. Starting with Linux kernel version 4.14, it is possible to send seccomp violation messages even if the program is allowed to continue (see 'seccomp-error-action EPERM' above). This logging feature is disabled by default in our implementation."
+          userns:
+            type: bool
+            required: false
+            description: "Enable or disable user namespace support, default enabled."
+          whitelist_disable_topdir:
+            type: str
+            required: false
+            description: "Disable whitelist top level directories, in addition to those that are disabled out of the box. None by default; this is an example /etc,/usr/etc"
+          x11:
+            type: bool
+            required: false
+            description: "Enable or disable X11 sandboxing support, default enabled."
+          xephyr_extra_params:
+            type: list
+            elements: str
+            required: false
+            description: "Xephyr command extra parameters. None by default; these are examples."
+          xephyr_screen:
+            type: list
+            elements: str
+            required: false
+            description: "Screen size for --x11=xephyr, default 800x600. Run /usr/bin/xrandr for a full list of resolutions available on your specific setup."
+          xephyr_window_title:
+            type: bool
+            required: false
+            description: "Firejail window title in Xephyr, default enabled."
+          xpra_attach:
+            type: bool
+            required: false
+            description: "Enable this option if you have a version of Xpra that supports --attach switch for start command, default disabled."
+          xpra_extra_params:
+            elements: str
+            required: false
+            description: "Xpra server command extra parameters. None by default; this is an example. --dpi 96"
+          xvfb_screen:
+            type: list
+            elements: str
+            required: false
+            description: "Screen size for --x11=xvfb, default 800x600x24. The third dimension is color depth; use 24 unless you know exactly what you're doing."
+          xvfb_extra_params:
+            type: list
+            elements: str
+            required: false
+            description: "Xvfb command extra parameters.  None by default; this is an example."
+      firefox_firejail_users:
+        type: list
+        elements: str
+        required: true
+        description: A list of users for /etc/firejail/firejail.users.
       firefox_gpg_checksum:
         type: str
         required: true

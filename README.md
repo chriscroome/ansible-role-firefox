@@ -32,6 +32,14 @@ firefox_editions:
 
 A boolean, install and configure Firejail, `firefox_firejail` defaults to `true`.
 
+### firefox_firejail_config
+
+A dictionay of configuration for `/etc/firejail/firejail.config`, with dashes changes to underscores, when the dictionary is templated underscores are changed to dashes.
+
+### firefox_firejail_users
+
+A list of usernames to write to `/etc/firejail/firejail.users`.
+
 ### firefox_lang
 
 The Firefox language, `firefox_lang` defaults to `en-GB`.
@@ -62,6 +70,6 @@ If you use this role please use a tagged release, see [the release notes](https:
 
 ## Copyright
 
-Copyright 2022-2024 Chris Croome, &lt;[chris@webarchitects.co.uk](mailto:chris@webarchitects.co.uk)&gt;.
+Copyright 2022-2025 Chris Croome, &lt;[chris@webarchitects.co.uk](mailto:chris@webarchitects.co.uk)&gt;.
 
 This role is released under [the same terms as Ansible itself](https://github.com/ansible/ansible/blob/devel/COPYING), the [GNU GPLv3](LICENSE).
