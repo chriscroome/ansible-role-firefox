@@ -45,6 +45,14 @@
         regex: '^[#]?[ ]?browser-disable-u2f'
         state: present
 
+    - name: Firejail users configured
+      ansible.builtin.template:
+        src: firejail.users.j2
+        dest: /etc/firejail/firejail.users
+        owner: root
+        group: root
+        mode: "0644"
+
     - name: Firefix profiles present
       ansible.builtin.template:
         src: firefox.profile.j2

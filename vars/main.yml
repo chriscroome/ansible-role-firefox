@@ -35,13 +35,14 @@ firefox_firejail_default_config:
   join_timeout: 5
   tracelog: false
   name_change: true
-  netfilter-default: ""  # empty string causes the variable to be omitted
+  netfilter_default: ""  # empty string causes the variable to be omitted
   network: true
   overlayfs: true
   etc_hide_blacklisted: false
   file_copy_limit: 500
   private_bin: true
   private_bin_no_local: false
+  private_cache: true
   private_etc: true
   private_home: true
   private_lib: false
@@ -49,7 +50,7 @@ firefox_firejail_default_config:
   private_srv: true
   quiet_by_default: false
   restricted_network: true
-  seccomp: two
+  seccomp: true
   seccomp_filter_add: ""  # empty string causes the variable to be omitted
   seccomp_error_action: EPERM
   seccomp_log: false
