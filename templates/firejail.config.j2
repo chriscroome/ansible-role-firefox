@@ -1,0 +1,62 @@
+{# j2lint: disable=jinja-variable-format #}
+# {{ ansible_managed }}
+#
+# This is Firejail system-wide configuration file. The file contains
+# keyword-argument pairs, one per line. Most features are enabled by default.
+# Use 'yes' or 'no' as configuration values.
+
+{# Config loop, turn the dictionary into a key, value list #}
+{% for firejail_cfg_pair in firefox_firejail_cfg | ansible.builtin.dict2items %}
+{# Description from the argument specification #}
+{%     if firefox_firejail_argument_spec[firejail_cfg_pair.key].description is defined %}
+{{ firefox_firejail_argument_spec[firejail_cfg_pair.key].description | wordwrap(78) | ansible.builtin.comment(prefix_count=0,postfix_count=0) }}
+{%     else %}
+# The {{ firejail_cfg_pair.key }} variable appears to be missing from the meta/argument_specs.yml
+# if it was present the variable description would be printed here.
+{%     endif %}
+{#     If the value is a list repeat the key for each list item #}
+{%     if firejail_cfg_pair.value | ansible.builtin.type_debug == "list" %}
+{%         for firejail_cfg_pair_value in firejail_cfg_pair.value %}
+{#             If the value is a boolean use yes or no as values #}
+{%             if firejail_cfg_pair.value | ansible.builtin.type_debug == "bool" %}
+{%                 if firejail_cfg_pair.value | bool %}
+{# replace underscores with dashes in the key name #}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} yes
+{%                 else %}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} no
+{%                 endif %}
+{#             If the value is not a interger and is an empty string comment it with no value set #}
+{%             elif firejail_cfg_pair.value | ansible.builtin.type_debug != "int" and firejail_cfg_pair.value | length == 0 %}
+# {{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }}
+{%             else %}
+{#                 If the value contains a space then quote it #}
+{%                 if firejail_cfg_pair_value is ansible.builtin.regex('[ ]') | bool %}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} "{{ firejail_cfg_pair_value }}"
+{%                 else %}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} {{ firejail_cfg_pair_value }}
+{%                 endif %}
+{%             endif %}
+{%         endfor %}
+{%     else %}
+{#         If the value is a boolean use yes or no as values #}
+{%         if firejail_cfg_pair.value | ansible.builtin.type_debug == "bool" %}
+{%             if firejail_cfg_pair.value | bool %}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} yes
+{%             else %}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} no
+{%             endif %}
+{#         If the value in an empty string comment it with no value set #}
+{%         elif firejail_cfg_pair.value | ansible.builtin.type_debug != "int" and firejail_cfg_pair.value | length == 0 %}
+# {{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }}
+{%         else %}
+{#             If the value contains a space then quote it #}
+{%             if firejail_cfg_pair.value is ansible.builtin.regex('[ ]') | bool %}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} "{{ firejail_cfg_pair.value }}"
+{%             else %}
+{{ firejail_cfg_pair.key | ansible.builtin.regex_replace('_', '-') }} {{ firejail_cfg_pair.value }}
+{%             endif %}
+{%         endif %}
+{%     endif %}
+
+{% endfor %}
+{# vim: syntax=jinja2 #}

@@ -20,6 +20,7 @@ firefox_editions:
     pkg: firefox-nightly
 firefox_firejail: true
 firefox_firejail_config:
+  browser_disable_u2f: false
   force_nonewprivs: true
 firefox_firejail_users:
   - "{{ lookup('env', 'USER') }}"

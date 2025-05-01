@@ -37,13 +37,41 @@
         cache_valid_time: 30
       when: firefox_backports not in firefox_apt_cache_policy.stdout
 
-    - name: Enable U2F
-      ansible.builtin.lineinfile:
-        path: /etc/firejail/firejail.config
+    - name: Set a fact for the firejain config options as defined in the arg spec
+      ansible.builtin.set_fact:
+        firefox_firejail_argument_spec: "{{ (lookup('ansible.builtin.file', 'meta/argument_specs.yml') | ansible.builtin.from_yaml).argument_specs.main.options.firefox_firejail_default_config.options }}"
+
+    - name: Debug firefox_firejail_argument_spec
+      ansible.builtin.debug:
+        var: firefox_firejail_argument_spec
+        # verbosity: "{% if ansible_check_mode | bool %}3{% else %}4{% endif %}"
+      tags:
+        - debug
+
+    - name: Set a fact for the firejail config
+      ansible.builtin.set_fact:
+        firefox_firejail_cfg: "{{ firefox_firejail_default_config | ansible.builtin.combine(firefox_firejail_config) }}"
+
+    - name: Debug firefox_firejail_cfg
+      ansible.builtin.debug:
+        var: firefox_firejail_cfg
+        # verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
+      tags:
+        - debug
+
+    - name: Check the combined firejail config using the argument spec
+      ansible.builtin.validate_argument_spec:
+        argument_spec: "{{ firefox_firejail_argument_spec }}"
+        provided_arguments: "{{ firefox_firejail_cfg }}"
+
+    - name: Firejail config present
+      ansible.builtin.template:
+        src: firejail.config.j2
+        dest: /etc/firejail/firejail.config
+        owner: root
+        group: root
         mode: "0644"
-        line: browser-disable-u2f no
-        regex: '^[#]?[ ]?browser-disable-u2f'
-        state: present
+        backup: true
 
     - name: Firejail users configured
       ansible.builtin.template:
@@ -52,6 +80,7 @@
         owner: root
         group: root
         mode: "0644"
+        backup: true
 
     - name: Firefix profiles present
       ansible.builtin.template:

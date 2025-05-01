@@ -17,14 +17,15 @@ firefoxhostvars: "{{ dict(firefoxvarnames | list | zip(q('vars', *firefoxvarname
 # JMESPath query for Firefox Nightly GPG fingerprints
 firefox_gpg_fingerprints_query: "[?type=='fpr'].user_id"
 
-# The default Firejail config for /etc/firejail/firejail.config
+# The default Firejail config from /etc/firejail/firejail.config overide using
+# firefox_firejail_config
 firefox_firejail_default_config:
   allow_tray: false
   apparmor: true
   arp_probes: 2
   bind: true
   browser_allow_drm: false
-  browser_disable_u2f: false
+  browser_disable_u2f: true
   chroot: false
   dbus: true
   disable_mnt: false
